@@ -5,7 +5,7 @@ baseurl: ""
 markdown: kramdown
 
 # Configuration
-tracking_id: #
+tracking_id: "UA-40106303-1"
 twitter_username: "s_m__lgr__n"
 
 sass:
