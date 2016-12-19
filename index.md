@@ -12,10 +12,4 @@ on multi-agent markets for indivisible goods with
 [Prof. Stuart Shieber](http://eecs.harvard.edu/shieber/) with [Computer Science 51: Abstraction and 
 Design in Computation](http://cs51.io).
 
-## Projects
-
-- Voting App
-- LaTeX Serial Number Generator
-- 
-
-> To a great mind, nothing is little. 
+> “We are all born ignorant, but one must work hard to remain stupid.” - Benjamin Franklin
