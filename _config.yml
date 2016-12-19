@@ -1,0 +1,13 @@
+title: Samuel Green
+url: "http://sa.muel.green"
+baseurl: ""
+
+markdown: kramdown
+
+# Configuration
+tracking_id: #
+twitter_username: "s_m__lgr__n"
+
+sass:
+    style: compressed
+    sass_dir: _sass

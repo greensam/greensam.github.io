@@ -1,0 +1,8 @@
+- name: "Contact"
+  link: "contact"
+
+- name: "About"
+  link: "/"
+
+- name: "Blog"
+  link: "/"
