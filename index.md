@@ -14,4 +14,4 @@ Design in Computation](http://cs51.io) along with [Gabbi Merz](http://gcmerz.git
 
 ## Reviews
 
-> “OK, I guess.” - Anonymous Student, 2016 Q Guide.
+> “OK, I guess.” - Enthusiastic Student, [2016 Q Guide](http://www.fas.harvard.edu/~evals/).
