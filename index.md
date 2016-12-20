@@ -11,7 +11,3 @@ on [multi-agent markets](https://en.wikipedia.org/wiki/Two-sided_market) for ind
 [Prof. David Parkes](http://www.eecs.harvard.edu/~parkes/). I also help
 [Prof. Stuart Shieber](http://eecs.harvard.edu/shieber/) teach [Computer Science 51: Abstraction and 
 Design in Computation](http://cs51.io) along with [Gabbi Merz](http://gcmerz.github.io). 
-
-## Reviews
-
-> “OK, I guess.” - Enthusiastic Student, [2016 Q Guide](http://www.fas.harvard.edu/~evals/).
