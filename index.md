@@ -1,5 +1,6 @@
 ---
 layout: default
+title: Home | Samuel Green
 ---
 
 ## About
