@@ -1,0 +1,327 @@
+\documentclass[12p]{amsart}
+
+\input{../cs51-preamble}
+
+\title{CS 51\\ Code Review 1}
+\date{\today}
+\author{Samuel Green}
+
+\begin{document}
+\maketitle
+
+\section{Philosophy}
+
+\begin{center}
+There is more than one way to solve a problem.
+
+\textbf{Some ways are better than others.}
+\end{center}
+
+\section{Important Terminology}
+
+A \firstuse{value} is the unit of reasoning in a functional programming language.
+
+\medskip
+
+A \firstuse{type} is the abstract analog of a value. Every value
+in \ocaml{} has exactly 1 type. 
+
+\firstuse{Primitive data types} refer to the smallest, most
+essential building blocks of a programming language. By 
+composing primitives, we build up a richer and richer
+vocabulary with which to represent the world. Examples
+of primitives are \texttt{int}, \texttt{bool}, \texttt{float}, 
+and so on. 
+
+\medskip
+
+\firstuse{Compound types} are compositions of multiple primitive 
+types. Examples include functions, tuples, lists, among others. 
+
+\medskip
+
+A \firstuse{function} is a special type of value. Abstractly,
+functions convert one value (an \firstuse{argument}) into another value,
+a \firstuse{return value}, possibly of a different type. \ocaml{} has
+syntax for functions of multiple arguments, but it's very helpful 
+to think of \ocaml{} functions as always taking one value and returning
+another. Because they are values, functions can be passed as arguments to 
+other functions or can be returned as return values by other functions.
+
+\medskip
+
+An \firstuse{expression} is a composition of some number of
+values and functions. 
+
+\medskip
+
+An \firstuse{Identifier} is used to specify and keep track of a single
+value in \ocaml{}. Prof. Shieber also calls these \firstuse{variables},
+but I find it helpful to call them identifiers, since identifiers themselves
+don't contain or store anything: they are instead used to 
+\textit{identify}, or name, values to which they are associated. For example,
+in the expression 
+\begin{quote}
+\begin{caml_listing}
+let x = 5;;
+\end{caml_listing}
+\end{quote}
+The identifier is \texttt{x}, because it \textit{identifies} the value 5. 
+
+\medskip
+
+\firstuse{Abstract syntax}, and discussion of abstraction in general, 
+refers to the \textit{ideas} and \textit{concepts} that we use
+to reason about problems and programs and that ultimately inform
+how we write code. Understanding the abstract syntax you are working
+with is at least as important, if not more important, than the concrete
+syntax. Ideas about abstraction are definitely
+the most important in this course, particularly because it's not unfair to observe 
+that \ocaml{} is not a especially widespread.
+
+\firstuse{Concrete Syntax} refers to the nuts and bolts of a programming
+language: the semicolons, spaces and tabs, and so forth. There's a fair
+amount of concrete syntax to keep track of in \ocaml{}, but it will
+be much easier to keep everything clear if you have a good grasp on
+the abstract ideas that are always present underneath. 
+
+A \firstuse{type constructor} refers to the concrete syntax used
+to specify a type. Every type constructor necessarily has at least one corresponding \firstuse{value constructor}, which is the syntax
+used to create values of that type. 
+
+\firstuse{Scope} refers to the ``area'' of a program from which the value
+associated with an identifier can be reached. 
+
+\firstuse{Higher-order} is used to describe functions that operate on 
+other functions or produce other functions. To check that you are 
+comfortable with this idea, convince yourself that every function
+that takes multiple arguments in OCaml is technically higher order. 
+
+An \firstuse{anonymous} value (or more typically, an anonymous function) 
+is a value that is never associated with an identifier. Examples are
+\begin{quote}
+\begin{caml_listing}
+5;; 
+fun y -> y;;
+\end{caml_listing}
+\end{quote}
+Each of these is a valid value in \ocaml{}, despite never being bound
+to an identifier. An identifier that starts with \texttt{\_}) is also called anonymous. 
+
+\begin{center}
+More terminology next week. 
+\end{center}
+
+\section{Git Cheatsheet}
+
+Make sure that you've watched TF Brian Yu's \href{https://www.youtube.com/watch?v=YcenZfJrxvc&t=6s}{awesome video on Git}. 
+
+There are 3 (important) states that a file can exist in: unstaged, staged, and committed. If a file is unstaged,
+either it is not being tracked by Git, or it has been changed since the last time it was committed but 
+has not been marked for commit yet. Files that are staged have changed since the last time they
+were committed, but haven't been committed yet. Staged files are ``snapshotted'' when they're committed, 
+at which point they move back to being unstaged once they are edited again. 
+
+Key commands: 
+
+\begin{enumerate}
+    \item \texttt{git add}:  Move a file from unstaged to stage. 
+    \item \texttt{git commit <-a> <-m ``message''>}: Commit the files current in the staging area (i.e take a snapshot). 
+        The \textit{-a} flag automatically adds files that have been previously tracked into the staging area before committing.
+        The \textit{-m ``message''} flag associates a message with the commit; if you don't include it, you'll be prompted to
+        type one into a text editor pop-up. 
+    \item \texttt{git push}. Send your local changes to a remote repository (i.e. GitHub).
+    \item \texttt{git pull}. Get changes from a remote repository. 
+    \item Many more -- Google is your friend, and 
+        \href{https://xkcd.com/1597/}{no one ever \textit{really} knows everything there is to know about Git}. 
+\end{enumerate}
+
+
+\section{General Advice}
+
+\begin{enumerate}
+    \item The type system is your friend. It's tricky at the beginning, but learning
+            to rely on and love it will pay dividends. Thinking about and writing
+            down the types of functions you intend to write is a great first step. 
+
+    \item Don't starting writing concrete syntax until you understand the abstract 
+            problem. Writing symbols that are confusing to begin with will rarely make
+            things clearer. 
+
+    \item Keep your code organized, and be systematic in the way you write it. 
+            Creating code that ``looks'' clear to read (uniform spacing, etc) is present you's
+            way of helping future you make progress.
+
+    \item The problem sets are not (only) about writing code. This comes back to the abstract
+            versus concrete syntax idea. None of the exercises in this course is written
+            with ``it's very important that students know how to build \textit{x} piece of software'
+            in mind. Rather, they are designed to teach underlying concepts, and identifying those
+            concepts will help you see the value of the exercises. Don't hesitate to ask if the 
+            connections are always clear. 
+\end{enumerate}
+
+\newpage
+\section{Exercises}
+
+\begin{exercise} Write the type of the following value: 
+
+\ifsoln
+\begin{caml_example}
+let myfun1 =
+  let greet y = "Hello " ^ y
+  in fun x -> string_of_float x ^ greet "World!";;
+\end{caml_example}
+\else
+\begin{caml_example*}
+let myfun1 =
+  let greet y = "Hello " ^ y
+  in fun x -> string_of_float x ^ greet "World!";;
+\end{caml_example*}
+\fi
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} Write the type of the following function, and say what it does:
+
+\ifsoln
+\begin{caml_example}
+let rec myfun2 = fun l ->
+    match l with 
+    | [] -> [0]
+    | hd :: tl -> hd :: (myfun2 tl) ;; 
+\end{caml_example}
+\solution{The function takes a list of integers and appends 0 to it.}
+\else
+\begin{caml_example*}
+let rec myfun2 = fun l ->
+    match l with 
+    | [] -> [0]
+    | hd :: tl -> hd :: (myfun2 tl) ;; 
+\end{caml_example*}
+\fi 
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} Write the type of the following value: 
+
+\ifsoln
+\begin{caml_example}
+let myfun3 =
+  let greet y = "Hello " ^ y
+  in fun x -> let (z, y) = x in 
+                string_of_float z ^ greet "World" ^ string_of_int y;;
+\end{caml_example}
+\else
+\begin{caml_example*}
+let myfun3 =
+  let greet y = "Hello " ^ y
+  in fun x -> let (z, y) = x in 
+                string_of_float z ^ greet "World" ^ string_of_int y;;
+\end{caml_example*}
+\fi
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} What's the type of the function \texttt{devious} defined below?
+\begin{caml_listing}
+let devious x : ??? =
+    match x with    
+    | [] -> true     
+    | [_y] -> false     
+    | h :: n :: _tl -> (h *. n) < 0.0 ;;
+\end{caml_listing}
+
+\ifsoln
+\solution{\texttt{val devious : float list -> bool}}
+\fi
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} Annotate the type of the following function
+as it is applied to arguments one at a time. 
+
+\begin{caml_example*}
+let myst q x z = 
+    if q then float_of_int x +. z
+    else z ** float_of_int x ;; 
+\end{caml_example*}
+
+\ifsoln
+\begin{caml_example}
+myst  ;;
+
+myst false ;;
+
+myst false 51 ;; 
+
+myst false 51 5.1 ;; 
+\end{caml_example}
+\fi
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} Define a function \texttt{zip} that 
+converts two lists into a list of tuples. 
+
+\ifsoln
+\solution{Version 1: we could start with a version like this. 
+Some problems though: how are mismatched lengths handled?}
+\begin{caml_listing}
+let rec zip (x : int list) (y : int list) : (int * int) list =
+  match x, y with
+  | [], [] -> []
+  | xhd :: xtl, yhd :: ytl -> (xhd, yhd) :: (zip xtl ytl) ;;
+\end{caml_listing}
+
+\solution{Version 2: }
+\begin{caml_example}
+let rec zip (x : int list) (y : int list) : (int * int) list =
+  match x, y with
+  | [], [] -> []
+  | xhd :: xtl, yhd :: ytl -> (xhd, yhd) :: (zip xtl ytl) 
+  | _, _ -> raise (Invalid_argument "zip: mismatched list lengths") ;;
+\end{caml_example}
+
+What's going on with the \texttt{match x,y} magic? Remember
+that \texttt{match} statements are used to destructure 
+values, and that we can create values out of other values.
+In this case, we create the tuple value \texttt{(x,y)} (parentheses 
+implied by the type) and then deconstruct its component parts.
+This is a very handy approach!
+\fi
+\end{exercise}
+
+\nextproblem
+
+\begin{exercise} Using a \texttt{fold}, write a function that
+calculates the cumulative exponentiation of a \texttt{float list},
+using \texttt{1} as the initial value. 
+\ifsoln
+\begin{caml_example}
+let cum_exp = List.fold_left ( ** ) 1.;;
+\end{caml_example}
+
+\solution{Aside: what does this function always return?}
+\fi
+
+\end{exercise}
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

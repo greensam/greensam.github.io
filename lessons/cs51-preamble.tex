@@ -1,0 +1,323 @@
+\usepackage{etex}
+
+% index
+%\usepackage{makeidx}   % not needed in AMS styles
+\makeindex
+\newcommand{\indx}[1]{\index{#1}#1}
+\renewcommand{\seename}{see}    % AMS style has it as "see also"
+
+% fonts
+\usepackage{palatino}
+\usepackage{pxfonts}
+\usepackage{pifont}
+\usepackage{alltt}
+\usepackage{textcomp}
+\usepackage{upquote}
+
+% color 
+\usepackage[usenames,dvipsnames]{xcolor}
+
+\newcommand{\highlightcolor}{BrickRed}
+\newcommand{\lowlightcolor}{Gray}
+
+% listings, links, etc. 
+\usepackage[colorlinks=true,
+            urlcolor=\highlightcolor,
+            linkcolor=\highlightcolor,
+            citecolor=\highlightcolor]{hyperref}
+\urlstyle{same}  % don't use monospace font for urls 
+\usepackage{listings}
+
+% code listings using minted and pygments
+\usepackage{minted}
+% At some point, need to write a better pygment style as per http://pygments.org/docs/styles/
+\usemintedstyle{bw} %trac
+\setminted{xleftmargin=2\parindent}
+% This environment definition doesn't work, since minted is a verbatim
+% environment that needs to see a real \end{minted} not
+% a \end{ocamlex}. Too bad.
+%\newenvironment{ocamlex}{\begin{minted}{ocaml}}{\end{minted}}
+
+
+% Configuration for Caml listings using camltex
+
+\newlength{\abovecamlskip}
+\setlength{\abovecamlskip}{\bigskipamount}
+\newlength{\belowcamlskip}
+\setlength{\belowcamlskip}{\bigskipamount}
+\newlength{\camlblanklineskip}
+\setlength{\camlblanklineskip}{\medskipamount}
+
+% This command allows putting together multiple caml listings with
+% controllable space between them.
+\newcommand{\nextcaml}{%
+\vspace{\camlblanklineskip}%
+}
+
+\newcommand{\ocaml}{\texttt{OCaml}}
+
+% tables
+\usepackage{tabulary}
+\usepackage{booktabs}
+\usepackage[tableposition=below]{caption}
+\usepackage{graphicx}
+
+% fancy verbatim environment, useful for typesetting program output
+\usepackage{fancyvrb}
+
+% linguistic examples
+\usepackage{lingmacros}
+
+% interline spacing
+\usepackage{setspace}
+\onehalfspacing
+%\doublespacing
+
+% em-dashes (some inspiration taken from ltugboat.sty)
+\newcommand{\dashpunctskip}{\hspace{.25em}\relax}
+%\newcommand{\dd}{\unskip{\,--\,}\ignorespaces}
+%\newcommand{\dd}{\unskip{---}\ignorespaces}
+%\newcommand{\dd}{\unskip{ -- }\ignorespaces}
+\newcommand{\dd}{\unskip\nobreak\dashpunctskip--\dashpunctskip\ignorespaces}
+
+% if using xelatex, the following synonym works
+%\newcommand{\—}{\dd}
+
+% a literal (like a filename) which should be presented verbatim, but
+% allow line breaks but no hyphens inserted
+\newcommand{\literal}[1]{\nolinkurl{#1}}
+\usepackage{underscore}
+\newcommand{\code}[1]{\texttt{#1}}
+
+% tree drawing
+%\usepackage{parsetree}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+% document structure
+\newcommand{\newsection}[1]{\clearpage\section{#1}}
+\newcommand{\topic}[1]{\subsection*{#1}}
+\setcounter{tocdepth}{1}
+
+% symbols
+\usepackage{amssymb}
+\usepackage{bbding}
+\usepackage{mathtools}
+\usepackage{textcomp}
+\usepackage{extarrows}  % extensible arrows
+
+% random symbols
+\renewcommand{\tilde}{\textasciitilde}
+
+% sets and sequences
+\newcommand{\seq}[1]{{\langle #1 \rangle}}
+\newcommand{\set}[1]{{\{ #1 \}}}
+\newcommand{\vect}[1]{\mathbf{#1}} % variables over strings and sequences
+\renewcommand{\emptyset}{\varnothing}
+\newcommand{\emptystr}{\varepsilon}
+\newcommand{\generic}[1]{\mbox{$\langle$\textrm{\textit{#1}}$\rangle$}}
+
+% floor and ceiling
+\newcommand{\floor}[1]{\left\lfloor #1 \right\rfloor}
+\newcommand{\ceil}[1]{\left\lceil #1 \right\rceil}
+
+% guillemets
+\usepackage[T1]{fontenc}
+
+% operators
+\newcommand{\argmax}{\operatornamewithlimits{argmax}}
+\newcommand{\cnt}[1]{\sharp(#1)}
+\newcommand{\definedby}{\triangleq}
+\newcommand{\Prob}{{\Pr}}
+\newcommand{\Prcap}{\widehat\Prob}
+\DeclareMathOperator{\Perplex}{Pp}
+\newcommand{\Pathprob}{{\Prob}_{path}} 
+\newcommand{\blt}{\mathop{\bullet}}
+
+% semiring operations and values
+% circled plus and times for semirings
+%\newcommand{\vplusinternal}{\ooalign{\hss$\circ$\hss\cr$+$}}
+%\newcommand{\vtimesinternal}{\ooalign{\hss$\circ$\hss\cr$\times$}}
+\newcommand{\vplus}{\mathrel{\mathchoice{\vplusinternal}{\vplusinternal}{\scriptsize\vplusinternal}{\tiny\vplusinternal}}}
+\newcommand{\vtimes}{\mathrel{\mathchoice{\vtimesinternal}{\vtimesinternal}{\scriptsize\vtimesinternal}{\tiny\vtimesinternal}}}
+%\newcommand{\vplus}{\oplus}
+%\newcommand{\vtimes}{\otimes}
+%\newcommand{\vzero}{{\ooalign{\hss$\circ$\hss\cr$0$}}}
+%\newcommand{\vone}{{\ooalign{\hss$\circ$\hss\cr$
+%\usepackage{fge}
+%\newcommand{\vzero}{\fgestruckzero}
+%\newcommand{\vone}{\fgestruckone}
+%\newcommand{\vzero}{0}
+%\newcommand{\vone}{1}
+
+% numerals
+\newcommand{\num}[1]{\underline{\ensuremath{#1}}}
+\newcommand{\vzero}{\num{0}}
+\newcommand{\vone}{\num{1}}
+\newcommand{\vplusinternal}{\underline{+}}
+\newcommand{\vtimesinternal}{\underline{\times}}
+
+% logic
+\newcommand{\Land}{\wedge}
+\newcommand{\Lor}{\vee}
+\newcommand{\Lnot}{\neg}
+\newcommand{\Lif}{\rightharpoonup}
+\newcommand{\Liff}{\rightleftharpoons}
+\newcommand{\Ltrue}{T}
+\newcommand{\Lfalse}{F}
+
+% types
+\newcommand{\cross}{\times}
+%\newcommand{\to}{\rightarrow}
+
+% lambda calculus
+\newcommand{\subst}[3]{#1[#3 \mapsto #2]}   % subst P for x in Q is \subst{Q}{P}{x}
+\newcommand{\rewrites}[1]{\xlongrightarrow{\ #1\ }}
+\newcommand{\rwrts}{\rewrites{}}
+\newcommand{\redex}[1]{\underline{#1}}
+
+% OCaml rewriting
+\newcommand{\oredex}[1]{\underline{#1}}
+\newcommand{\orwrts}{\(\rwrts\)}
+
+% better spacing in conditional probabilities, instead of
+% \newcommand{\given}{|}           % too little space
+%\newcommand{\given}{\mid}     % too much space
+\newcommand{\given}{\,|\,}      % just right
+
+% values of random variables
+\newcommand{\rvval}[1]{\mathsf{#1}}
+
+% indicator functions
+\newcommand{\indic}[1]{\mathbb{I}\left[#1\right]}
+
+% start and end of string symbols
+\newcommand{\strbeg}{\mbox{\guillemotleft}}
+\newcommand{\strend}{\mbox{\guillemotright}}
+
+% different types of symbols
+\newcommand{\sym}[1]{\mbox{#1}}
+% nonterminals and terminals
+\newcommand{\ntm}[1]{\mbox{\textit{#1}}}
+\newcommand{\tm}[1]{\mbox{\textrm{#1}}}
+\newcommand{\term}[1]{\ntm{#1}} % deprecated; use \nt
+\newcommand{\func}[1]{\operatorname{\mathit{#1}}}
+
+% grammar rules
+\newcommand{\goesto}{\rightarrow}
+
+% punctuation in equations
+\newcommand{\eqpunc}[1]{{\makebox[0pt][l]{\qquad\rm{#1}}}}
+
+% first mentions and other marginalia
+\newcommand{\firstusefont}[1]{\textsc{#1}}
+\newcommand{\firstuse}[1]{\firstusemarked{#1}{#1}}
+% first use with separate margin and inline (= index) forms
+\newcommand{\firstusemarked}[2]{\firstusemarkedindexed{#1}{#2}{#1}}
+% first use with separate margin, inline, and index forms
+%   for placing the index item at a separate location in the index, use 
+%   \firstusemarked{margin}{inline}{index@indexloc}, e.g.,
+%   \firstusemarked{$n$-gram}{$n$-gram}{n-gram@$n$-gram}
+\newcommand{\firstusemarkedindexed}[3]{\index{#3}\firstusefont{#2}%
+  \marginpar[\begin{spacing}{.75}\vspace{-.75ex}\raggedleft\scriptsize\firstusefont{\raggedleft\color{\highlightcolor} #1}\end{spacing}\vspace*{2.75ex}]{\begin{spacing}{.75}\vspace{-.75ex}\raggedright\scriptsize\firstusefont{\raggedright\color{\highlightcolor} #1}\end{spacing}\vspace*{2.75ex}}}
+
+
+% instructor material
+\newif\ifinstructor
+\instructortrue
+\instructorfalse
+
+\newcommand{\instructor}[1]{\ifinstructor\begin{instructorchunk}#1\end{instructorchunk}\fi}
+\newenvironment{instructorchunk}%
+{\marginpar[\raggedleft\color{red}\PencilRight]{\raggedright\color{red}\PencilLeft}\color{red}}{}
+
+\newcommand{\inclass}[2]{\ifinstructor\begin{instructorchunk}\begin{description}\item[Question]#1\par\item[Answer]#2\end{description}\end{instructorchunk}\fi}
+
+
+% displaying shell commands and interactive python
+
+\DefineVerbatimEnvironment%
+{commandblock}{Verbatim}
+{commandchars=\\\{\}, xleftmargin=2\parindent}
+
+\newcommand{\command}[1]{%
+\begin{quote}
+\begin{alltt}
+#1
+\end{alltt}
+\end{quote}}
+\newcommand{\shellcommand}[1]{\command{\$ #1}}
+
+% advanced topics
+
+\usepackage{manfnt}
+%\newcommand{\advanced}[1]{\footnote{\manimpossiblecube: #1}}
+%\newcommand{\advanced}[1]{\begin{quote}\color{\lowlightcolor}\manimpossiblecube~\small
+%    #1\end{quote}}
+
+%\newenvironment{advanced}{\begin{quote}\color{\lowlightcolor}\manimpossiblecube~\small}{\end{quote}}
+
+\newenvironment{advanced}{\begin{list}{}{%
+      \setlength{\leftmargin}{15ex}%
+      \setlength{\rightmargin}{0ex}%
+    }
+  \item \color{\highlightcolor}\manimpossiblecube\hspace{2ex}\small \color{\lowlightcolor} }{\end{list}}
+
+%\renewenvironment{advanced}{\par\begingroup\color{gray}\makebox[0pt][r]{\manimpossiblecube\hspace{5ex}}\small}{\endgroup\par}
+
+% bibliography
+\usepackage[colon]{natbib}
+
+% theorems
+\newtheorem{theorem}{Theorem}
+
+% problems and exercises
+\newcommand{\probmark}{\hfill{$\Box$}}
+\newtheorem{probleminternal}{Problem}
+\newtheorem{questioninternal}{Question}
+\newtheorem{exerciseinternal}[probleminternal]{Exercise}% 
+\newtheorem{stageinternal}[probleminternal]{Stage}% 
+\newenvironment{exercise}{\begin{exerciseinternal}}{\probmark\end{exerciseinternal}}
+\newenvironment{problem}{\begin{probleminternal}}{\probmark\end{probleminternal}}
+\newenvironment{stage}{\begin{stageinternal}}{\probmark\end{stageinternal}}
+\newenvironment{question}{\begin{questioninternal}}{\probmark\end{questioninternal}}
+
+\newcommand{\nextproblem}{\vspace{2em}}
+
+\newcommand{\solution}[1]{{\color{\highlightcolor}
+   \begin{quote}\textbf{Solution:} #1\end{quote}
+   }}
+ 
+% temporary notes
+\newcommand{\note}[1]{{\color{red}{[[[#1]]]}}}
+%\newcommand{\note}[1]{{\color{red} \textbf{[[[#1]]]}}}
+\renewcommand{\note}[1]{}
+
+\sloppy
+
+% line numbering
+% Don't need lineno since minted loads it.
+%\usepackage[switch*,mathlines]{lineno}
+\runningpagewiselinenumbers
+\setpagewiselinenumbers
+\switchlinenumbers*
+\linenumberdisplaymath
+\modulolinenumbers[5]
+\renewcommand\linenumberfont{\normalfont\tiny\sffamily\color{Tan}}
+
+\usepackage{bussproofs}
+\newcommand{\SideCond}[1]{\RightLabel{\ #1}}
+
+\newcommand{\types}{\mathcal{T}}
+\newcommand{\consts}[1]{\mathcal{C}_{#1}}
+\newcommand{\vars}[1]{\mathcal{X}_{#1}}
+\newcommand{\fto}[2]{\langle #1, #2 \rangle}
+\newcommand{\domain}[2]{\mathcal{D}_{#1,#2}}
+\newcommand{\true}{\mathsf{True}}
+\newcommand{\false}{\mathsf{False}}
+\newcommand{\model}{\mathcal{M}}
+\newcommand{\assign}{\mathcal{G}}
+\newcommand{\dennoparams}[1]{\llbracket #1 \rrbracket}
+\newcommand{\den}[3]{\dennoparams{#1}_{#2,#3}}
+\newcommand{\denmg}[1]{\den{#1}{\model}{\assign}}
+
