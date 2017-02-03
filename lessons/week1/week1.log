@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  3 FEB 2017 11:20
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  3 FEB 2017 11:29
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1427,20 +1427,20 @@ LaTeX Warning: Marginpar on page 1 moved.
 [1{/usr/local/texlive/2015/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 [2] [3]
 LaTeX Font Info:    Font shape `T1/pxtt/m/it' in size <10> not available
-(Font)              Font shape `T1/pxtt/m/sl' tried instead on input line 240.
+(Font)              Font shape `T1/pxtt/m/sl' tried instead on input line 244.
  [4] [5]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 384.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 384.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 388.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 388.
  (./week1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 384.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 384.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 388.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 388.
 Package rerunfilecheck Info: File `week1.out' has not changed.
 (rerunfilecheck)             Checksum: 4CB171F2AE0882AA56431CD7592FEC40;258.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 384.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 388.
  ) 
 Here is how much of TeX's memory you used:
- 23657 strings out of 493089
- 420329 string characters out of 6134842
+ 23658 strings out of 493089
+ 420336 string characters out of 6134842
  516769 words of memory out of 5000000
  26462 multiletter control sequences out of 15000+600000
  35798 words of font info for 92 fonts, out of 8000000 for 9000
@@ -1455,10 +1455,10 @@ nts/type1/public/txfonts/t1xtt.pfb></usr/local/texlive/2015/texmf-dist/fonts/ty
 pe1/urw/palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw
 /palatino/uplr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palati
 no/uplri8a.pfb>
-Output written on week1.pdf (5 pages, 82277 bytes).
+Output written on week1.pdf (5 pages, 82584 bytes).
 PDF statistics:
- 110 PDF objects out of 1000 (max. 8388607)
- 94 compressed objects within 1 object stream
- 27 named destinations out of 1000 (max. 500000)
+ 111 PDF objects out of 1000 (max. 8388607)
+ 95 compressed objects within 1 object stream
+ 28 named destinations out of 1000 (max. 500000)
  53 words of extra memory for PDF output out of 10000 (max. 10000000)
 
