@@ -1,0 +1,361 @@
+\documentclass[12p]{amsart}
+
+\input{../cs51-preamble}
+
+\title{CS 51\\ Code Review 1}
+\date{\today}
+\author{Samuel Green}
+
+\begin{document}
+\maketitle
+
+\section{Topics}
+
+\begin{itemize}
+
+  \item Record Types and Algebraic Data Types
+  \item Currying and Partial Application*
+  \item Option Types and Error Handling* 
+  \item From last week:
+    \begin{itemize}
+      \item Higher order functions
+      \item Anonymous functions
+      \item General syntax: \texttt{match}, \texttt{let}, \texttt{in}
+    \end{itemize}
+\end{itemize}
+
+\section{Records}
+
+Records allow us to combine related pieces of 
+data into one unified structure. Imagine
+we wanted to model data for a student. 
+A record could be a good choice, because
+there are multiple different views of different
+types, and they don't have a natural ordering:
+
+\begin{quote}
+\begin{caml_example*}
+type student = {
+  name : string; 
+  email : string ;
+  huid : int ;
+  enrolled : bool 
+} ;;
+\end{caml_example*}
+\end{quote}
+
+Here's an example of a value of this type:
+
+\begin{quote}
+\begin{caml_example}
+let sam = {
+  name = "samuel"; 
+  email = "s@muel.green";
+  huid = 51515151; 
+  enrolled = false
+} ;; 
+\end{caml_example}
+\end{quote}
+
+To pull a field out of a record, we can use
+pattern matching, field punning, or dot notation.
+There isn't a ``right'' choice for which of
+these syntaxes should be preferred -- I'd recommend
+relying on the one that makes your code the most
+readable. 
+
+
+\subsection{Pattern Matching}
+
+\begin{caml_listing}
+let get_huid1 (stu : student) = 
+  let { huid = h; _ } = stu in h ;; 
+
+get_huid1 sam ;; 
+\end{caml_listing}
+
+In this case, the identifier \texttt{h} is bound
+to the value in the \texttt{huid} field of the record.
+
+\subsection{Field Punning}
+
+With a dryly appropriate name, field punning allows
+for direct access of record fields by name in 
+pattern matches. For example, this is equivalent
+to the function above:
+
+\begin{caml_example}
+let get_huid2 (stu : student) = 
+  let { huid ; _ } = stu in huid ;;
+
+get_huid2 sam ;;
+\end{caml_example}
+
+As with tuples, we can move this destructuring
+into the argument: 
+
+\begin{caml_example}
+let get_huid3 ({ huid; _ } : student) = 
+  huid ;;
+
+get_huid3 sam ;;
+\end{caml_example}
+
+\subsection{Dot Notation}
+
+Finally, there's standard dot notation, 
+which is probably most appropriate when accessing
+only 1 field of a record. In the case of our
+running example: 
+
+\begin{caml_example}
+let get_huid4 (s : student) = s.huid ;;
+
+get_huid4 sam ;;
+\end{caml_example}
+
+\section{Record Types}
+
+Algebraic data types are great, but what
+if we want to model a system or some data
+that we need to constraint to a fixed set of 
+different values? Imagine, for example,
+that we wanted to add a field to the student
+record to record the student's \texttt{enrollment type}.
+
+We could start by storing this data
+as a string, like this: 
+
+\begin{caml_example}
+type student_with_type = {
+  email : string ;
+  enrollment_type : string
+} ;;
+\end{caml_example}
+
+By convention, we could then say that a student
+is either ``FAS'', ``DCE'', or ``None''.
+We can construct an valid value like this: 
+
+\begin{caml_example}
+let new_sam = { email = "HUID"; 
+                enrollment_type = "HEAD TF, NOT STUDENT" };;
+\end{caml_example}
+
+Wait a second! This doesn't meet our convention
+for values of the \texttt{student_with_type} type,
+but it's still valid, according to \texttt{OCaml}.
+
+\begin{caml_example}
+new_sam ;;
+\end{caml_example}
+
+We solve this problem by with Algebraic Data Types (ADTs),
+which limit the space of possible values. There
+are two types of ADTs: Cartesian products (i.e. tuples)
+and sum types (called variants). Here's an example
+that uses both: 
+
+\begin{caml_example}
+type enrollment = Faculty of string * int | 
+                  FAS | DCE | Not ;;
+\end{caml_example}
+
+In this case, the \texttt{Faculty} variant is
+used to construct named tuples of a string and an int.
+The other variant create values that represent those
+values distinct, such as: 
+
+\begin{caml_example}
+let shieb : enrollment = Faculty ("Prof. Shieber", 1) ;;
+let sam : enrollment = FAS ;;
+let reagan : enrollment = DCE ;; 
+let goodell : enrollment = Not ;;
+\end{caml_example}
+
+We can embed ADTs in records, name records in ADTs, 
+and take advantage of all the other value manipulation
+syntax (\texttt{match}, \texttt{let}, type signatures)
+that we've see so far. Example:
+
+\begin{caml_example}
+let is_shieber (enr : enrollment) : bool =
+  match enr with
+  | Faculty (name, _) -> name = "Prof. Shieber"
+  | _ -> false ;;
+
+is_shieber shieb ;;
+\end{caml_example}
+
+\subsection{Recursive ADTs}
+
+A final note is that ADTs can be recursive.
+For example: 
+\begin{caml_example}
+type partner = Two of student * partner  | One of student ;;
+\end{caml_example}
+This would allow us to represent students partnerships
+and also demonstrates how to use records in ADTs.  
+
+\section{Exercises}
+
+\begin{exercise} Improve the original definition
+of \texttt{student_with_type} data type. Why
+is the old version bad and the new version better?
+\end{exercise}
+
+\ifsoln
+\begin{caml_example}
+type student = {
+  email : string ;
+  enrollment : enrollment ;
+} ;;
+
+{ email = "s@muel.green"; enrollment = FAS} ;;
+\end{caml_example}
+\fi
+
+\begin{exercise} Write a data type \texttt{counts}
+to represent counting by one.
+Then write a function that
+takes a number and returns its \texttt{int} representation.
+\end{exercise}
+
+\ifsoln
+\begin{caml_example}
+type count = AddOne of count | Zero ;;
+
+let rec int_of_count c = 
+  match c with
+  | Zero -> 0
+  | AddOne c' -> 1 + (int_of_count c') ;;
+
+int_of_count (AddOne(AddOne(Zero))) = 2;;
+\end{caml_example}
+\fi
+
+\begin{exercise}
+
+Here's the solution to \texttt{curry}. Re-write it 
+without using the syntactic sugar of multiple arguments,
+and give the complete type of the identifier \texttt{curry}.
+\end{exercise}
+
+\ifsoln
+\begin{caml_example}
+let curry f x y = f (x, y) ;;
+\end{caml_example}
+%
+\solution{}
+If we unwrap the syntactic sugar all the way,
+this function can be written as:
+%
+\begin{caml_example}
+let curry : ('a * 'b -> 'c) -> ('a -> 'b -> 'c) = 
+  fun f -> 
+    fun x -> 
+      fun y -> f (x, y) ;; 
+\end{caml_example}
+% 
+However, this doesn't seem be the clearest way it can be written. How about expressing it this way: 
+\begin{caml_example}
+let curry : ('a * 'b -> 'c) -> ('a -> 'b -> 'c) = 
+  fun f -> 
+    fun x y -> f (x, y) ;; 
+\end{caml_example}
+It's a little clearer here that the function \texttt{curry}
+takes a function $f$ of one argument (``uncurried'')
+and returns a new function that takes two arguments.
+In this case, that function is the anonymous function
+\begin{quote}
+\begin{caml_listing}
+fun x y -> f (x, y) ;; 
+\end{caml_listing}
+\end{quote}
+
+Going one step farther up makes it into the version
+that I find clearest: 
+
+\begin{caml_example}
+let curry (f : 'a * 'b -> 'c) : ('a -> 'b -> 'c) =
+  fun x y -> f (x, y) ;;
+\end{caml_example}
+
+The important recurring concepts here are:
+\begin{enumerate}
+  \item There is more than one operationally identical
+        way to express the same solution here. Some
+        of them are much clearer to read than others!
+
+  \item The type system is our guide throughout. 
+\end{enumerate}
+\else
+\begin{quote}
+\begin{caml_listing}
+let curry f x y = f (x, y) ;;
+\end{caml_listing}
+\end{quote}
+\fi
+
+\begin{exercise} Write a function \texttt{mapfilter}
+that takes a list and two functions, $pred$ and $transf$. 
+$\texttt{mapfilter}$ should return a list containing
+the result of applying \texttt{transf} to every element
+for which \texttt{pred} is true, and removing the elements
+for which \texttt{pred} is false.
+
+\begin{enumerate}
+\item write the type of \texttt{mapfilter}.
+
+\item write \texttt{mapfilter} without using the \texttt{List} module.
+
+\item re-write \texttt{mapfilter} using the \texttt{List}
+module. 
+
+\item just for practice, write \texttt{mapfilter} so that
+it returns \texttt{None} if the resulting list is empty. Is
+this a necessary way to handle errors here? 
+\end{enumerate}
+
+\end{exercise}
+
+\ifsoln
+\solution{Version 1, without the List module}
+\begin{caml_example}
+let rec mapfilter pred transf lst = 
+  match lst with
+  | [] -> []
+  | hd :: tl -> if pred hd 
+                then (transf hd) :: (mapfilter pred transf tl)
+                else (mapfilter pred transf tl) ;;
+\end{caml_example}
+
+\solution{Version 2, with the List module}
+\begin{caml_example}
+let mapfilter pred transf lst = 
+  List.map transf (List.filter pred lst) ;;
+\end{caml_example}
+
+\solution{Version 3, just for practice:}
+\begin{caml_example}
+let mapfilter_option pred transf lst = 
+  let res = mapfilter pred transf lst in 
+  match res with 
+  | [] -> None
+  | _ -> Some res ;;
+\end{caml_example}
+\fi
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
