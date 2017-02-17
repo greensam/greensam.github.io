@@ -1,0 +1,356 @@
+\documentclass[12p]{amsart}
+
+\input{../cs51-preamble}
+
+\title[]{CS 51\\ Code Review 3}
+\date{\today}
+\author{Samuel Green and Gabbi Merz}
+
+
+\usepackage{fancyvrb,color}
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.46,0.46}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.80,0.00,0.64}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.76,0.31,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+\begin{document}
+\maketitle
+\tableofcontents
+
+% \section{Topics}
+
+% \begin{itemize}
+%   \item Algebraic Data Types and Records
+%   \item Modeling and Type Composition
+%   \item Invariants
+%   \item Design Choices
+% \end{itemize}
+
+Note that there are \textit{no} new syntax here -- we're just putting previous concepts
+and syntax together and thinking about modeling tradeoffs and other
+abstract concepts!
+
+\section{Invariants}
+
+\begin{definition}
+An \textbf{invariant} is a condition that is assumed
+to true of any value of a particular type, but that
+is not necessarily enforced by the compiler. 
+\end{definition} 
+
+Lab 3 and Problem Set 3 focus significantly on 
+the design and enforcement of invariants as a useful
+mechanism for programming in OCaml.
+
+What was the invariant of the \texttt{RGB} variant
+of the \texttt{color} type in Lab 3? 
+
+\ifsoln
+\solution{The invariant was that the integer values
+in the Cartesian type were all in the range (0, 255).}
+\fi
+
+Did the choice of the type help us enforce the invariant?
+What burden does this place on us as programmers? Could
+a different type definition have helped? Does the
+inclusion of \texttt{color_label} help for any
+specific reason? 
+
+\ifsoln
+\solution{The type system unfortunately can't do anything
+more than guarantee that each type is an \texttt{int},
+which is better than nothing. 
+
+We had to write our own
+validation code to \texttt{enforce} this
+invariant, to make sure that it was always true. 
+As programmers, this is work for us and for our 
+collaborators and particularly emphasizes the importance
+of code that is both self-documenting (well styled) and 
+documented (i.e. invariants are recorded in a comment.)
+
+The inclusion of \texttt{color_label} is a nice choice
+because it covers many of the simplest values, meaning
+that users of the code can construct common values of
+our \texttt{color} type without having enforce the
+invariant on their own. It's also maintainable, since
+we can make changes to which red or green we want to use
+by default very easily! }
+\fi
+
+\newpage
+\section{Modeling Choices}
+
+Because we have to autograde the labs and problem sets,
+there doesn't end up being a lot of space to exercise
+your modeling muscles when it comes to representing data
+in OCaml. Did you agree with the modeling choices we made
+in the lab? 
+
+Consider for example the following type for color:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{color\PYZus{}label} \PY{o}{=} \PY{n+nc}{Orange} \PY{o}{|} \PY{n+nc}{Brown} \PY{o}{|} \PY{n+nc}{Green} \PY{o}{;;}
+\PY{k}{type} \PY{n}{color\PYZus{}label} \PY{o}{=} \PY{n+nc}{Orange} \PY{o}{|} \PY{n+nc}{Brown} \PY{o}{|} \PY{n+nc}{Green}
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{n+nc}{Simple} \PY{k}{of} \PY{n}{color\PYZus{}label} \PY{o}{|} \PY{n+nc}{RGB} \PY{k}{of} \PY{k+kt}{int} \PY{o}{*} \PY{k+kt}{int} \PY{o}{*} \PY{k+kt}{int} \PY{o}{;;}
+\PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{n+nc}{Simple} \PY{k}{of} \PY{n}{color\PYZus{}label} \PY{o}{|} \PY{n+nc}{RGB} \PY{k}{of} \PY{k+kt}{int} \PY{o}{*} \PY{k+kt}{int} \PY{o}{*} \PY{k+kt}{int}
+\end{Verbatim}
+
+Why did choose this definition, particularly of \texttt{RGB}? What
+do you think of this redefinition? 
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{rgb} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{r} \PY{o}{:} \PY{k+kt}{int} \PY{o}{;} \PY{n}{g} \PY{o}{:} \PY{k+kt}{int} \PY{o}{;} \PY{n}{b} \PY{o}{:} \PY{k+kt}{int} \PY{o}{\PYZcb{}} \PY{o}{;;} 
+\PY{k}{type} \PY{n}{rgb} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{r} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{n}{g} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{n}{b} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{o}{\PYZcb{}}
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{simple} \PY{o}{:} \PY{n}{color\PYZus{}label} \PY{n}{option}\PY{o}{;} \PY{n}{rgb} \PY{o}{:} \PY{n}{rgb} \PY{n}{option} \PY{o}{\PYZcb{}} \PY{o}{;;}
+\PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{simple} \PY{o}{:} \PY{n}{color\PYZus{}label} \PY{n}{option}\PY{o}{;} \PY{n}{rgb} \PY{o}{:} \PY{n}{rgb} \PY{n}{option}\PY{o}{;} \PY{o}{\PYZcb{}}
+\end{Verbatim}
+
+Is this example better or worse? Is there something better 
+or worse? Is there an example that's similarly ``good'' to 
+the first version but that uses a record type instead? 
+
+\ifsoln
+\solution{There's a reasonable argument that representing
+an RGB triple as a record could make sense. }
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{rgb} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{r} \PY{o}{:} \PY{k+kt}{int} \PY{o}{;} \PY{n}{g} \PY{o}{:} \PY{k+kt}{int} \PY{o}{;} \PY{n}{b} \PY{o}{:} \PY{k+kt}{int} \PY{o}{\PYZcb{}} \PY{o}{;;}
+\PY{k}{type} \PY{n}{rgb} \PY{o}{=} \PY{o}{\PYZob{}} \PY{n}{r} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{n}{g} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{n}{b} \PY{o}{:} \PY{k+kt}{int}\PY{o}{;} \PY{o}{\PYZcb{}}
+\PY{o}{\PYZsh{}} \PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{n+nc}{Simple} \PY{k}{of} \PY{n}{color\PYZus{}label} \PY{o}{|} \PY{n+nc}{RGB} \PY{k}{of} \PY{n}{rgb} \PY{o}{;;}
+\PY{k}{type} \PY{n}{color} \PY{o}{=} \PY{n+nc}{Simple} \PY{k}{of} \PY{n}{color\PYZus{}label} \PY{o}{|} \PY{n+nc}{RGB} \PY{k}{of} \PY{n}{rgb}
+\end{Verbatim}
+\fi
+
+\newpage
+\section{Concise and Field Punning: \texttt{valid_date}}
+
+Here's a long version of the \texttt{valid_date} function.
+What do you think of its design and style? 
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{valid\PYZus{}date} \PY{o}{(}\PY{n}{d} \PY{o}{:} \PY{n}{date}\PY{o}{)} \PY{o}{:} \PY{n}{date} \PY{o}{=}
+  \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{year} \PY{o}{\PYZlt{}}\PY{o}{=} \PY{l+m+mi}{0} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{only positive years}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+  \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{1} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{3} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{5} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{7} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{8} \PY{o}{|}\PY{o}{|}
+     \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{10} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{12} \PY{k}{then}
+    \PY{o}{(}\PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZgt{}} \PY{l+m+mi}{31} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{too many days}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+    \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{days must be \PYZgt{}1}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+    \PY{n}{d}\PY{o}{)} \PY{k}{else}
+  \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{4} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{6} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{9} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{11} \PY{k}{then}
+    \PY{o}{(}\PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZgt{}} \PY{l+m+mi}{30} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{too many days}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+    \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{days must be \PYZgt{}1}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+    \PY{n}{d}\PY{o}{)} \PY{k}{else}
+  \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{month} \PY{o}{=} \PY{l+m+mi}{2} \PY{k}{then}
+    \PY{o}{(}\PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{4} \PY{o}{=} \PY{l+m+mi}{0} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{d}\PY{o}{.}\PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{100} \PY{o}{\PYZlt{}}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{o}{|}\PY{o}{|} \PY{n}{d}\PY{o}{.}\PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{400} \PY{o}{=} \PY{l+m+mi}{0} \PY{k}{then}
+      \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZgt{}} \PY{l+m+mi}{29} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{too many days}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+      \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{days must be \PYZgt{}1}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+      \PY{n}{d}
+    \PY{k}{else} 
+      \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZgt{}} \PY{l+m+mi}{28} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{too many days}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+      \PY{k}{if} \PY{n}{d}\PY{o}{.}\PY{n}{day} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1} \PY{k}{then} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{days must be \PYZgt{}1}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{k}{else}
+      \PY{n}{d}\PY{o}{)} \PY{k}{else}
+  \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bad month}\PY{l+s+s2}{\PYZdq{}}\PY{o}{)} \PY{o}{;;}
+\end{Verbatim}
+
+What are some first observations about this code, perhaps some
+easy simplifications that could be made? 
+
+\ifsoln
+\solution{Here's a non-exhaustive list of things that come to mind.}
+\begin{itemize}
+  \item Day, Month, and Year are \textit{all} referenced multiple times
+        throughout this piece of code. Using \textbf{field punning} would
+        make a lot of sense here.
+  \item Exception raising logic is repeated -- we could extract the
+        raising logic into a separate helper function. 
+  \item This is a situation where a \texttt{match} makes sense for an 
+        \texttt{int}, because of there are distinct cases for us to
+        consider. 
+\end{itemize}
+
+Here's a potential improved version:
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{valid\PYZus{}date} \PY{o}{(}\PY{o}{\PYZob{}} \PY{n}{year}\PY{o}{;} \PY{n}{month}\PY{o}{;} \PY{n}{day} \PY{o}{\PYZcb{}} \PY{k}{as} \PY{n}{d}\PY{o}{)} \PY{o}{:} \PY{n}{date} \PY{o}{=} 
+  \PY{k}{let} \PY{n}{raise\PYZus{}bad} \PY{n}{m} \PY{o}{=} \PY{k}{raise} \PY{o}{(}\PY{n+nc}{Invalid\PYZus{}Date} \PY{n}{m}\PY{o}{)} \PY{k}{in}
+  \PY{k}{if} \PY{n}{year} \PY{o}{\PYZlt{}} \PY{l+m+mi}{0} \PY{k}{then} \PY{n}{raise\PYZus{}bad} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{only positive years}\PY{l+s+s2}{\PYZdq{}} 
+  \PY{k}{else}
+    \PY{k}{let} \PY{n}{leap} \PY{o}{=} \PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{4} \PY{o}{=} \PY{l+m+mi}{0} \PY{o}{\PYZam{}\PYZam{}} \PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{100} \PY{o}{\PYZlt{}}\PY{o}{\PYZgt{}} \PY{l+m+mi}{0} \PY{o}{|}\PY{o}{|} \PY{n}{year} \PY{o+ow}{mod} \PY{l+m+mi}{400} \PY{o}{=} \PY{l+m+mi}{0} \PY{k}{in}
+    \PY{k}{let} \PY{n}{max\PYZus{}days} \PY{o}{=}
+      \PY{k}{match} \PY{n}{month} \PY{k}{with}
+      \PY{o}{|} \PY{l+m+mi}{1} \PY{o}{|} \PY{l+m+mi}{3} \PY{o}{|} \PY{l+m+mi}{5} \PY{o}{|} \PY{l+m+mi}{7} \PY{o}{|} \PY{l+m+mi}{8} \PY{o}{|} \PY{l+m+mi}{10} \PY{o}{|} \PY{l+m+mi}{12} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{31}
+      \PY{o}{|} \PY{l+m+mi}{4} \PY{o}{|} \PY{l+m+mi}{6} \PY{o}{|} \PY{l+m+mi}{9} \PY{o}{|} \PY{l+m+mi}{11} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{30}
+      \PY{o}{|} \PY{l+m+mi}{2} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{if} \PY{n}{leap} \PY{k}{then} \PY{l+m+mi}{29} \PY{k}{else} \PY{l+m+mi}{28} 
+      \PY{o}{|} \PY{o}{\PYZus{}} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{raise\PYZus{}bad} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{bad month}\PY{l+s+s2}{\PYZdq{}} \PY{k}{in}
+    \PY{k}{if} \PY{n}{day} \PY{o}{\PYZgt{}} \PY{n}{max\PYZus{}days} \PY{k}{then} \PY{n}{raise\PYZus{}bad} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{too many days}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{else} \PY{k}{if} \PY{n}{day} \PY{o}{\PYZlt{}} \PY{l+m+mi}{1} \PY{k}{then} \PY{n}{raise\PYZus{}bad} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{days must be \PYZgt{}1}\PY{l+s+s2}{\PYZdq{}}
+    \PY{k}{else} \PY{n}{d} \PY{o}{;;}
+\end{Verbatim}
+\fi
+
+\newpage
+\section{Abstraction: \texttt{count_people} and the \texttt{List} module.}
+
+Recall the family tree modeling problem from the Lab. (Aside: did you 
+like the model? Did you agree with the type definitions?)
+
+Here's a definition of the function \texttt{count_people} from the lab:
+% Preliminaries
+% 
+% definition
+% 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{k}{rec} \PY{n}{count\PYZus{}people} \PY{o}{(}\PY{n}{fam} \PY{o}{:} \PY{n}{family}\PY{o}{)} \PY{o}{:} \PY{k+kt}{int} \PY{o}{=}
+  \PY{k}{match} \PY{n}{fam} \PY{k}{with}
+  \PY{o}{|} \PY{n+nc}{Single} \PY{o}{\PYZus{}} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{1}
+  \PY{o}{|} \PY{n+nc}{Family} \PY{o}{(}\PY{o}{\PYZus{}}\PY{o}{,} \PY{o}{\PYZus{}}\PY{o}{,} \PY{n}{fl}\PY{o}{)} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{2} \PY{o}{+} \PY{n}{count\PYZus{}people} \PY{n}{fl} \PY{o}{;;}
+\end{Verbatim}
+
+Great. Right? (What's the error here?)
+
+How can we improve this implementation? 
+
+\ifsoln
+\solution{Here's a version that uses recursion directly. 
+This seems a little repetitive, though!}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{k}{rec} \PY{n}{count\PYZus{}people} \PY{o}{(}\PY{n}{f} \PY{o}{:} \PY{n}{family}\PY{o}{)} \PY{o}{:} \PY{k+kt}{int} \PY{o}{=}
+  \PY{c}{(*}\PY{c}{ helper function to sum over family list }\PY{c}{*)} 
+  \PY{k}{let} \PY{k}{rec} \PY{n}{count\PYZus{}list} \PY{o}{(}\PY{n}{l} \PY{o}{:} \PY{n}{family} \PY{k+kt}{list}\PY{o}{)} \PY{o}{:} \PY{k+kt}{int} \PY{o}{=}
+    \PY{k}{match} \PY{n}{l} \PY{k}{with} \PY{n+nb+bp}{[]} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{0}
+    \PY{o}{|} \PY{n}{hd} \PY{o}{::} \PY{n}{tl} \PY{o}{\PYZhy{}\PYZgt{}} \PY{o}{(}\PY{n}{count\PYZus{}people} \PY{n}{hd}\PY{o}{)} \PY{o}{+} \PY{n}{count\PYZus{}list} \PY{n}{tl} \PY{k}{in}
+         
+  \PY{k}{match} \PY{n}{f} \PY{k}{with} 
+  \PY{n+nc}{Single} \PY{o}{\PYZus{}} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{1}
+  \PY{o}{|} \PY{n+nc}{Family} \PY{o}{(}\PY{o}{\PYZus{}}\PY{o}{,} \PY{o}{\PYZus{}}\PY{o}{,} \PY{n}{fl}\PY{o}{)} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{2} \PY{o}{+} \PY{n}{count\PYZus{}list} \PY{n}{fl} \PY{o}{;;}
+\end{Verbatim}
+
+\solution{I think we can make this even more concise as follows:}
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{k}{rec} \PY{n}{count\PYZus{}people} \PY{o}{(}\PY{n}{fam} \PY{o}{:} \PY{n}{family}\PY{o}{)} \PY{o}{:} \PY{k+kt}{int} \PY{o}{=}
+  \PY{k}{match} \PY{n}{fam} \PY{k}{with}
+  \PY{o}{|} \PY{n+nc}{Family} \PY{o}{(}\PY{o}{\PYZus{}}\PY{o}{,} \PY{o}{\PYZus{}}\PY{o}{,} \PY{n}{children}\PY{o}{)} \PY{o}{\PYZhy{}\PYZgt{}} 
+    \PY{l+m+mi}{2} \PY{o}{+} \PY{n+nn}{List}\PY{p}{.}\PY{n}{fold\PYZus{}left} 
+          \PY{o}{(}\PY{k}{fun} \PY{n}{prev} \PY{n}{sub\PYZus{}fam} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{count\PYZus{}people} \PY{n}{sub\PYZus{}fam} \PY{o}{+} \PY{n}{prev}\PY{o}{)} 
+          \PY{l+m+mi}{0} \PY{n}{children} 
+  \PY{o}{|} \PY{o}{\PYZus{}} \PY{o}{\PYZhy{}\PYZgt{}} \PY{l+m+mi}{1}\PY{o}{;;}
+\end{Verbatim}
+
+This should be understood as ``collapsing'' the family tree into
+a single summary statistic about the whole thing -- the magic is
+that we have a fold within a fold (via the recursive call to
+\texttt{count_people}) that nests a recursion across the 
+list of families \textit{and} down each family in the list
+at the same time.
+\fi
+
+\newpage
+\section{Nested Recursion: \texttt{find_parents}}
+
+
+
+
+\newpage
+\section{Problem Set 3: Tips `n` Tricks}
+
+\begin{itemize}
+
+  \item Keep your eyes open for \texttt{fold}ing opportunities. They
+        can appear where you least expect them and make for
+        very slick code! 
+
+  \item Built in operators are powerful, and OCaml knows
+        a lot about how to manipulate values. The \texttt{Pervasives} 
+        module has all of the secrets. For example, do you know
+        the type of the \texttt{( = )} function? 
+        How about other comparators? 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{o}{(} \PY{o}{=} \PY{o}{)} \PY{o}{;;}
+\PY{o}{\PYZhy{}} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{bool} \PY{o}{=} \PY{o}{\PYZlt{}}\PY{k}{fun}\PY{o}{\PYZgt{}}
+\end{Verbatim}
+  \item Make conscious choices about what method of record field
+        accessing you use. Using the ``easiest'' can make your 
+        code much more complicated than necessary!
+
+  \item Be deliberate about understanding the \texttt{times} function
+        and the algorithm \textbf{before} you start to code: the
+        code will only get in the way.
+
+  \item Appropriately scope helper functions. \textit{If you write a helper function that is only ever called within one other function it should be scoped as such}.
+
+  \item Make sure to read and understand the style guide. 
+\end{itemize}
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+

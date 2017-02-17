@@ -1,0 +1,6 @@
+\contentsline {section}{\tocsection {}{1}{Invariants}}{1}{section.1}
+\contentsline {section}{\tocsection {}{2}{Modeling Choices}}{2}{section.2}
+\contentsline {section}{\tocsection {}{3}{Concise and Field Punning: \texttt {valid_date}}}{3}{section.3}
+\contentsline {section}{\tocsection {}{4}{Abstraction: \texttt {count_people} and the \texttt {List} module.}}{4}{section.4}
+\contentsline {section}{\tocsection {}{5}{Nested Recursion: \texttt {find_parents}}}{5}{section.5}
+\contentsline {section}{\tocsection {}{6}{Problem Set 3: Tips `n` Tricks}}{6}{section.6}
