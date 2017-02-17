@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  17 FEB 2017 00:22
+This is pdfTeX, Version 3.14159265-2.6-1.40.16 (TeX Live 2015) (preloaded format=pdflatex 2015.5.24)  17 FEB 2017 14:15
 entering extended mode
  \write18 enabled.
  %&-line parsing enabled.
@@ -1431,21 +1431,21 @@ File: t1pxtt.fd 2000/12/14 v1.0
 [3] [4]
 [5]
 LaTeX Font Info:    Font shape `T1/pxtt/m/it' in size <10> not available
-(Font)              Font shape `T1/pxtt/m/sl' tried instead on input line 274.
+(Font)              Font shape `T1/pxtt/m/sl' tried instead on input line 265.
  [6] [7] [8]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 343.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 343.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 344.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 344.
  (./week3_soln.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 343.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 343.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 344.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 344.
 Package rerunfilecheck Info: File `week3_soln.out' has not changed.
 (rerunfilecheck)             Checksum: F40BC1F4BD79514FBDE1AEB9E0CB185F;406.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 343.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 344.
  ) 
 Here is how much of TeX's memory you used:
  23665 strings out of 493089
  420490 string characters out of 6134842
- 513934 words of memory out of 5000000
+ 513936 words of memory out of 5000000
  26474 multiletter control sequences out of 15000+600000
  36061 words of font info for 94 fonts, out of 8000000 for 9000
  1302 hyphenation exceptions out of 8191
@@ -1461,7 +1461,7 @@ rw/palatino/uplb8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/pala
 tino/uplbi8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/u
 plr8a.pfb></usr/local/texlive/2015/texmf-dist/fonts/type1/urw/palatino/uplri8a.
 pfb>
-Output written on week3_soln.pdf (8 pages, 93399 bytes).
+Output written on week3_soln.pdf (8 pages, 93814 bytes).
 PDF statistics:
  124 PDF objects out of 1000 (max. 8388607)
  102 compressed objects within 2 object streams

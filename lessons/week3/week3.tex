@@ -74,15 +74,6 @@
 \maketitle
 \tableofcontents
 
-% \section{Topics}
-
-% \begin{itemize}
-%   \item Algebraic Data Types and Records
-%   \item Modeling and Type Composition
-%   \item Invariants
-%   \item Design Choices
-% \end{itemize}
-
 Note that there are \textit{no} new syntax here -- we're just putting previous concepts
 and syntax together and thinking about modeling tradeoffs and other
 abstract concepts!
@@ -304,8 +295,20 @@ at the same time.
 \newpage
 \section{Nested Recursion: \texttt{find_parents}}
 
+Recall the definition of the \texttt{find_parents} function
+from the lab. What's a good strategy for writing a complicated
+function like this? 
 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{find\PYZus{}parents} \PY{o}{(}\PY{n}{fam} \PY{o}{:} \PY{n}{family}\PY{o}{)} \PY{o}{(}\PY{n}{n} \PY{o}{:} \PY{k+kt}{string}\PY{o}{)} \PY{o}{:} \PY{o}{(}\PY{n}{person} \PY{o}{*} \PY{n}{person}\PY{o}{)} \PY{n}{option} \PY{o}{=}
+\end{Verbatim}
 
+What are the challenges? What tools do we have to work on that? 
+
+\ifsoln
+The trick here is that we can use a \texttt{(person * person) option} 
+as a parameter going downwards as a parameter.
+\fi
 
 \newpage
 \section{Problem Set 3: Tips `n` Tricks}
@@ -337,8 +340,6 @@ at the same time.
 
   \item Make sure to read and understand the style guide. 
 \end{itemize}
-
-
 
 \end{document}
 
