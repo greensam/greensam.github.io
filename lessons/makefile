@@ -1,5 +1,5 @@
 clean:
-	rm -r _minted-* *.aux *.log *.idx *.out
+	rm -r _minted-* *.aux *.log *.idx *.out *.nav *.toc *.vrb *.snm
 
 %.tex: %.mlt
 	caml-tex -s igor -p -v '#' -o $@ $<

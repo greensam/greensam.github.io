@@ -1,0 +1,11 @@
+ps3.ml
+*.aux
+*.log
+*.mlt
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.tex
+
