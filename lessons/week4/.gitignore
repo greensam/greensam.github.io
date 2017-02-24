@@ -9,3 +9,5 @@ ps3.ml
 *.vrb
 *.tex
 
+lab4_part5_soln.ml
+template.*
