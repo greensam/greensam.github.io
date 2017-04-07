@@ -7,7 +7,7 @@ title: Home | Samuel Green
 
 <img class="profile-picture" src="headshot_new.jpg">
 
-I'm a Senior at Harvard College studying Computer Science. I'm writing a thesis
+I'm a Senior at Harvard College studying Computer Science. I wrote a thesis
 on [multi-agent markets](https://en.wikipedia.org/wiki/Two-sided_market) for indivisible goods with
 [Prof. David Parkes](http://www.eecs.harvard.edu/~parkes/). I also help
 [Prof. Stuart Shieber](http://eecs.harvard.edu/shieber/) teach [Computer Science 51: Abstraction and 
