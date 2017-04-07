@@ -1,0 +1,18 @@
+\frametitle{Subtype example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{class} \PY{k}{type} \PY{n}{quad} \PY{o}{=}
+\PY{k}{object}
+  \PY{c}{(*}\PY{c}{ get all of the functionality from shape }\PY{c}{*)}
+  \PY{k}{inherit} \PY{n}{shape}
+  \PY{c}{(*}\PY{c}{ add a new method }\PY{c}{*)}
+  \PY{k}{method} \PY{n}{sides} \PY{o}{:} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float}
+\PY{k}{end} \PY{o}{;;}
+
+\PY{o}{\PYZsh{}}
+\PY{k}{let} \PY{n}{sq} \PY{o}{:} \PY{n}{quad} \PY{o}{=} \PY{k}{new} \PY{n}{square\PYZus{}quad} \PY{o}{(}\PY{l+m+mi}{3}\PY{o}{.}\PY{o}{,} \PY{l+m+mi}{4}\PY{o}{.}\PY{o}{)} \PY{l+m+mi}{5}\PY{o}{.} \PY{o}{;;}
+
+\PY{o}{\PYZsh{}}
+\PY{c}{(*}\PY{c}{ coerce our square to be a shape }\PY{c}{*)}
+\PY{c}{(*}\PY{c}{ Also known as an ``upcast\PYZsq{}\PYZsq{} }\PY{c}{*)}
+\PY{k}{let} \PY{n}{a} \PY{o}{=} \PY{n}{area} \PY{o}{(}\PY{n}{sq} \PY{o}{:\PYZgt{}} \PY{n}{shape}\PY{o}{)} \PY{o}{;;}
+\end{Verbatim}

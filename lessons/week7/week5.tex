@@ -1,0 +1,258 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+% qtree
+% \usepackage{tikz-qtree}
+\usepackage{forest}
+
+\usepackage{subcaption}
+
+\title{CS 51 Code Review 7}
+\subtitle{Object-Oriented Programming}
+% \date{\today}
+\date{}
+\author{Sam Green and Gabbi Merz}
+\institute{Harvard University}
+
+
+\usepackage{fancyvrb,color}
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.46,0.46}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.80,0.00,0.64}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.76,0.31,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+\begin{document}
+
+% title
+\maketitle
+
+\section{Class Types and Signatures}
+
+\begin{frame}[fragile]{Module Type Example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c}{(*}\PY{c}{ a signature for a stack module }\PY{c}{*)}
+\PY{k}{module} \PY{k}{type} \PY{n+nc}{STACK} \PY{o}{=}
+  \PY{k}{sig}
+    \PY{k}{exception} \PY{n+nc}{Empty}
+    \PY{k}{type} \PY{n}{element}
+    \PY{k}{type} \PY{n}{stack}
+    \PY{k}{val} \PY{n}{pop} \PY{o}{:} \PY{n}{stack} \PY{o}{\PYZhy{}\PYZgt{}} \PY{o}{(}\PY{n}{element} \PY{n}{option} \PY{o}{*} \PY{n}{stack}\PY{o}{)}
+    \PY{k}{val} \PY{n}{push} \PY{o}{:} \PY{n}{element} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{stack} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{stack}
+    \PY{k}{val} \PY{n}{top} \PY{o}{:} \PY{n}{stack} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{element} \PY{n}{option}
+  \PY{k}{end} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Class Type Example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{c}{(*}\PY{c}{ class type for a stack }\PY{c}{*)}
+\PY{k}{class} \PY{k}{type} \PY{o}{[}\PY{k}{\PYZsq{}}\PY{n}{a}\PY{o}{]} \PY{n}{stack\PYZus{}i} \PY{o}{=} 
+    \PY{k}{object}
+        \PY{k}{val} \PY{k}{mutable} \PY{n}{internal} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{k+kt}{list}
+        \PY{k}{method} \PY{n}{push} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}
+        \PY{k}{method} \PY{n}{top} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{option}
+        \PY{k}{method} \PY{n}{pop} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{option}
+    \PY{k}{end} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+\section{Classes and Modules}
+
+\begin{frame}[fragile]{Stack: Module / Functor Example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{module} \PY{n+nc}{MakeStack} \PY{o}{(}\PY{n+nc}{Element}\PY{o}{:} \PY{n+nc}{SERIALIZE}\PY{o}{)} 
+    \PY{o}{:} \PY{o}{(}\PY{n+nc}{STACK} \PY{k}{with} \PY{k}{type} \PY{n}{element} \PY{o}{=} \PY{n+nn}{Element}\PY{p}{.}\PY{n}{t}\PY{o}{)} \PY{o}{=}
+  \PY{k}{struct}
+    \PY{k}{exception} \PY{n+nc}{Empty}
+    \PY{k}{type} \PY{n}{element} \PY{o}{=} \PY{n+nn}{Element}\PY{p}{.}\PY{n}{t}
+    \PY{k}{type} \PY{n}{stack} \PY{o}{=} \PY{n}{element} \PY{k+kt}{list}
+    \PY{k}{let} \PY{n}{empty} \PY{n+nb+bp}{()} \PY{o}{:} \PY{n}{stack} \PY{o}{=} \PY{n+nb+bp}{[]}
+    \PY{k}{let} \PY{n}{push} \PY{o}{(}\PY{n}{el}\PY{o}{:} \PY{n}{element}\PY{o}{)} \PY{o}{(}\PY{n}{s}\PY{o}{:} \PY{n}{stack}\PY{o}{)} \PY{o}{:} \PY{n}{stack} \PY{o}{=} \PY{n}{el} \PY{o}{::} \PY{n}{s}
+    \PY{k}{let} \PY{n}{top} \PY{o}{(}\PY{n}{s}\PY{o}{:} \PY{n}{stack}\PY{o}{)} \PY{o}{:} \PY{n}{element} \PY{o}{=} \PY{o}{..}\PY{o}{.}
+    \PY{k}{let} \PY{n}{pop} \PY{o}{(}\PY{n}{s}\PY{o}{:} \PY{n}{stack}\PY{o}{)} \PY{o}{:} \PY{n}{stack} \PY{o}{=} \PY{o}{..}\PY{o}{.}    
+  \PY{k}{end} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Stack: Class Example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{class} \PY{o}{[}\PY{k}{\PYZsq{}}\PY{n}{a}\PY{o}{]} \PY{n}{stack} \PY{n}{init} \PY{o}{=}
+    \PY{k}{object}\PY{o}{(}\PY{n}{this}\PY{o}{)}
+        \PY{k}{val} \PY{k}{mutable} \PY{n}{internal} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{k+kt}{list} \PY{o}{=} \PY{o}{[}\PY{n}{init}\PY{o}{]}
+        \PY{k}{method} \PY{n}{push} \PY{n}{e} \PY{o}{=}
+            \PY{n}{internal} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{e} \PY{o}{::} \PY{n}{internal}\PY{o}{;}
+            \PY{n+nb+bp}{()}
+        \PY{k}{method} \PY{n}{top} \PY{n+nb+bp}{()} \PY{o}{=} 
+            \PY{k}{match} \PY{n}{internal} \PY{k}{with}
+            \PY{o}{|} \PY{n+nb+bp}{[]} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n+nc}{None}
+            \PY{o}{|} \PY{n}{h} \PY{o}{::} \PY{o}{\PYZus{}}\PY{n}{t} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n+nc}{Some} \PY{n}{h}
+        \PY{k}{method} \PY{n}{pop} \PY{n+nb+bp}{()} \PY{o}{=} 
+            \PY{k}{match} \PY{n}{internal} \PY{k}{with}
+            \PY{o}{|} \PY{n+nb+bp}{[]} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n+nc}{None}
+            \PY{o}{|} \PY{n}{h} \PY{o}{::} \PY{n}{t} \PY{o}{\PYZhy{}\PYZgt{}} 
+                \PY{n}{internal} \PY{o}{\PYZlt{}\PYZhy{}} \PY{n}{t}\PY{o}{;}
+                \PY{n+nc}{Some} \PY{n}{h}
+    \PY{k}{end} \PY{o}{;;} 
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Stack Creation}
+
+Functional version:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{s} \PY{o}{=} \PY{n+nc}{MakeStack}\PY{o}{(}\PY{n+nc}{IntSerialize}\PY{o}{)}\PY{o}{.}\PY{n}{empty} \PY{o}{;;}
+\end{Verbatim}
+
+Object-oriented version:
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{s} \PY{o}{=} \PY{k}{new} \PY{n}{stack} \PY{l+m+mi}{5} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+
+\section{Inheritance}
+\begin{frame}[fragile]{Inheritance}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{class} \PY{n}{student} \PY{n}{name} \PY{n}{huid} \PY{o}{=} \PY{k}{object} \PY{o}{(}\PY{n}{this}\PY{o}{)}
+  \PY{k}{val} \PY{k}{mutable} \PY{n}{name}\PY{o}{:} \PY{k+kt}{string} \PY{o}{=} \PY{n}{name}
+  \PY{k}{val} \PY{k}{mutable} \PY{n}{huid}\PY{o}{:} \PY{k+kt}{int} \PY{o}{=} \PY{n}{huid}
+
+  \PY{k}{method} \PY{n}{print\PYZus{}info} \PY{n+nb+bp}{()} \PY{o}{=}
+    \PY{n+nn}{Printf}\PY{p}{.}\PY{n}{printf} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{\PYZpc{}s}\PY{l+s+se}{\PYZbs{}\PYZdq{}}\PY{l+s+s2}{ HUID: \PYZpc{}d }\PY{l+s+s2}{\PYZdq{}} \PY{n}{name} \PY{n}{huid}
+\PY{k}{end}
+
+\PY{k}{class} \PY{n}{upperclassman} \PY{n}{name} \PY{n}{huid} \PY{n}{house} \PY{o}{=} \PY{k}{object}
+  \PY{k}{inherit} \PY{n}{student} \PY{n}{name} \PY{n}{huid} \PY{k}{as} \PY{n}{super}
+  \PY{k}{val} \PY{k}{mutable} \PY{n}{house}\PY{o}{:} \PY{k+kt}{string} \PY{o}{=} \PY{n}{house}
+
+  \PY{k}{method} \PY{o}{!}\PY{n}{print\PYZus{}info} \PY{n+nb+bp}{()} \PY{o}{=}
+    \PY{n}{super}\PY{o}{\PYZsh{}}\PY{n}{print\PYZus{}info} \PY{n+nb+bp}{()}\PY{o}{;}
+    \PY{n+nn}{Printf}\PY{p}{.}\PY{n}{printf} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{House: \PYZpc{}s }\PY{l+s+s2}{\PYZdq{}} \PY{n}{house}
+\PY{k}{end} \PY{o}{;;} 
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Inheritance Instantiation Example}
+Before subclassing:
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{sam} \PY{o}{=} \PY{k}{new} \PY{n}{student} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sam}\PY{l+s+s2}{\PYZdq{}} \PY{l+m+mi}{1} \PY{o}{;;} 
+\PY{k}{val} \PY{n}{sam} \PY{o}{:} \PY{n}{student} \PY{o}{=} \PY{o}{\PYZlt{}}\PY{n}{obj}\PY{o}{\PYZgt{}}
+\PY{o}{\PYZsh{}} \PY{n}{samprint\PYZus{}info} \PY{n+nb+bp}{()} \PY{o}{;;} 
+\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{sam}\PY{l+s+s2}{\PYZdq{}} \PY{n+nc}{HUID}\PY{o}{:} \PY{l+m+mi}{1} \PY{o}{\PYZhy{}} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{=} \PY{n+nb+bp}{()}
+\end{Verbatim}
+
+After subclassing: 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{gabbi} \PY{o}{=} \PY{k}{new} \PY{n}{upperclassman} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Gabbi}\PY{l+s+s2}{\PYZdq{}} \PY{l+m+mi}{12345678} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Kirkland}\PY{l+s+s2}{\PYZdq{}} \PY{o}{;;}
+\PY{k}{val} \PY{n}{gabbi} \PY{o}{:} \PY{n}{upperclassman} \PY{o}{=} \PY{o}{\PYZlt{}}\PY{n}{obj}\PY{o}{\PYZgt{}}
+\PY{o}{\PYZsh{}} \PY{n}{gabbiprint\PYZus{}info} \PY{n+nb+bp}{()} \PY{o}{;;}
+\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Gabbi}\PY{l+s+s2}{\PYZdq{}} \PY{n+nc}{HUID}\PY{o}{:} \PY{l+m+mi}{12345678} \PY{n+nc}{House}\PY{o}{:} \PY{n+nc}{Kirkland} \PY{o}{\PYZhy{}} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{=} \PY{n+nb+bp}{()}
+\end{Verbatim}
+\end{frame}
+
+\section{Subtyping}
+
+\begin{frame}[fragile]{Supertype example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{class} \PY{k}{type} \PY{n}{shape} \PY{o}{=}
+\PY{k}{object}
+  \PY{k}{method} \PY{n}{area} \PY{o}{:} \PY{k+kt}{float}
+  \PY{k}{method} \PY{n}{bounding\PYZus{}box} \PY{o}{:} \PY{n}{point} \PY{o}{*} \PY{n}{point}
+  \PY{k}{method} \PY{n}{center} \PY{o}{:} \PY{n}{point}
+  \PY{k}{method} \PY{n}{translate} \PY{o}{:} \PY{n}{point} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}
+  \PY{k}{method} \PY{n}{scale} \PY{o}{:} \PY{k+kt}{float} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}
+\PY{k}{end} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+\begin{frame}[fragile]{Subtype example}
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{class} \PY{k}{type} \PY{n}{quad} \PY{o}{=}
+\PY{k}{object}
+  \PY{c}{(*}\PY{c}{ get all of the functionality from shape }\PY{c}{*)}
+  \PY{k}{inherit} \PY{n}{shape}
+  \PY{c}{(*}\PY{c}{ add a new method }\PY{c}{*)}
+  \PY{k}{method} \PY{n}{sides} \PY{o}{:} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float} \PY{o}{*} \PY{k+kt}{float}
+\PY{k}{end} \PY{o}{;;}
+
+\PY{o}{\PYZsh{}} 
+\PY{k}{let} \PY{n}{sq} \PY{o}{:} \PY{n}{quad} \PY{o}{=} \PY{k}{new} \PY{n}{square\PYZus{}quad} \PY{o}{(}\PY{l+m+mi}{3}\PY{o}{.}\PY{o}{,} \PY{l+m+mi}{4}\PY{o}{.}\PY{o}{)} \PY{l+m+mi}{5}\PY{o}{.} \PY{o}{;;}
+
+\PY{o}{\PYZsh{}} 
+\PY{c}{(*}\PY{c}{ coerce our square to be a shape }\PY{c}{*)} 
+\PY{c}{(*}\PY{c}{ Also known as an ``upcast\PYZsq{}\PYZsq{} }\PY{c}{*)}
+\PY{k}{let} \PY{n}{a} \PY{o}{=} \PY{n}{area} \PY{o}{(}\PY{n}{sq} \PY{o}{:\PYZgt{}} \PY{n}{shape}\PY{o}{)} \PY{o}{;;}
+\end{Verbatim}
+\end{frame}
+
+\end{document}

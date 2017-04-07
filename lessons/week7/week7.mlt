@@ -1,0 +1,189 @@
+\documentclass[10pt]{beamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+\usepackage{appendixnumberbeamer}
+
+\usepackage{booktabs}
+\usepackage[scale=2]{ccicons}
+
+\usepackage{pgfplots}
+\usepgfplotslibrary{dateplot}
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+% qtree
+% \usepackage{tikz-qtree}
+\usepackage{forest}
+
+\usepackage{subcaption}
+
+\title{CS 51 Code Review 7}
+\subtitle{Object-Oriented Programming}
+% \date{\today}
+\date{}
+\author{Sam Green and Gabbi Merz}
+\institute{Harvard University}
+
+\begin{document}
+
+% title
+\maketitle
+
+\section{Class Types and Signatures}
+
+\begin{frame}[fragile]{Module Type Example}
+\begin{caml_listing}
+(* a signature for a stack module *)
+module type STACK =
+  sig
+    exception Empty
+    type element
+    type stack
+    val pop : stack -> (element option * stack)
+    val push : element -> stack -> stack
+    val top : stack -> element option
+  end ;;
+\end{caml_listing}
+\end{frame}
+
+\begin{frame}[fragile]{Class Type Example}
+\begin{caml_listing}
+(* class type for a stack *)
+class type ['a] stack_i = 
+    object
+        val mutable internal : 'a list
+        method push : 'a -> unit
+        method top : unit -> 'a option
+        method pop : unit -> 'a option
+    end ;;
+\end{caml_listing}
+\end{frame}
+
+\section{Classes and Modules}
+
+\begin{frame}[fragile]{Stack: Module / Functor Example}
+\begin{caml_listing}
+module MakeStack (Element: SERIALIZE) 
+    : (STACK with type element = Element.t) =
+  struct
+    exception Empty
+    type element = Element.t
+    type stack = element list
+    let empty () : stack = []
+    let push (el: element) (s: stack) : stack = el :: s
+    let top (s: stack) : element = ...
+    let pop (s: stack) : stack = ...    
+  end ;;
+\end{caml_listing}
+\end{frame}
+
+\begin{frame}[fragile]{Stack: Class Example}
+\begin{caml_listing}
+class ['a] stack init =
+    object(this)
+        val mutable internal : 'a list = [init]
+        method push e =
+            internal <- e :: internal;
+            ()
+        method top () = 
+            match internal with
+            | [] -> None
+            | h :: _t -> Some h
+        method pop () = 
+            match internal with
+            | [] -> None
+            | h :: t -> 
+                internal <- t;
+                Some h
+    end ;; 
+\end{caml_listing}
+\end{frame}
+
+\begin{frame}[fragile]{Stack Creation}
+
+Functional version:
+
+\begin{caml_listing}
+let s = MakeStack(IntSerialize).empty ;;
+\end{caml_listing}
+
+Object-oriented version:
+
+\begin{caml_listing}
+let s = new stack 5 ;;
+\end{caml_listing}
+\end{frame}
+
+
+\section{Inheritance}
+\begin{frame}[fragile]{Inheritance}
+\begin{caml_example*}
+class student name huid = object (this)
+  val mutable name: string = name
+  val mutable huid: int = huid
+
+  method print_info () =
+    Printf.printf "\"%s\" HUID: %d " name huid
+end
+
+class upperclassman name huid house = object
+  inherit student name huid as super
+  val mutable house: string = house
+
+  method !print_info () =
+    super#print_info ();
+    Printf.printf "House: %s " house
+end ;; 
+\end{caml_example*}
+\end{frame}
+
+\begin{frame}[fragile]{Inheritance Instantiation Example}
+Before subclassing:
+\begin{caml_example}
+let sam = new student "sam" 1 ;; 
+sam#print_info () ;; 
+\end{caml_example}
+
+After subclassing: 
+\begin{caml_example}
+let gabbi = new upperclassman "Gabbi" 12345678 "Kirkland" ;;
+
+gabbi#print_info () ;;
+\end{caml_example}
+\end{frame}
+
+\section{Subtyping}
+
+\begin{frame}[fragile]{Supertype example}
+\begin{caml_example*}
+class type shape =
+object
+  method area : float
+  method bounding_box : point * point
+  method center : point
+  method translate : point -> unit
+  method scale : float -> unit
+end ;;
+\end{caml_example*}
+\end{frame}
+
+\begin{frame}[fragile]{Subtype example}
+\begin{caml_example*}
+class type quad =
+object
+  (* get all of the functionality from shape *)
+  inherit shape
+  (* add a new method *)
+  method sides : float * float * float * float
+end ;;
+
+let sq : quad = new square_quad (3., 4.) 5. ;;
+
+(* coerce our square to be a shape *) 
+(* Also known as an ``upcast'' *)
+let a = area (sq :> shape) ;;
+\end{caml_example*}
+\end{frame}
+
+\end{document}
