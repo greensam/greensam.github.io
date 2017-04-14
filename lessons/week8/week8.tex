@@ -1,0 +1,327 @@
+\documentclass[11pt]{amsart}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{minted}
+\input{../cs51-preamble}
+
+\title{Event Programming and Next Steps}
+\author{Sam Green}
+\date{\today}                                           % Activate to display a given date or no date
+
+
+\usepackage{fancyvrb,color}
+
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.46,0.46}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.80,0.00,0.64}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.76,0.31,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.61,0.00}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+\begin{document}
+\maketitle
+
+\section{API Design}
+
+Yesterday's lab focused on an implementation
+of the event system. To this point, we
+haven't talked much about what makes
+a useful API or a good interface. Let's 
+spend some time examining this interface.
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{module} \PY{k}{type} \PY{n+nc}{WEVENT} \PY{o}{=}
+\PY{k}{sig}
+  \PY{c}{(*}\PY{c}{ The event listener identifier type. }\PY{c}{*)}
+  \PY{k}{type} \PY{n}{id}
+
+  \PY{c}{(*}\PY{c}{ The event type. }\PY{c}{*)}
+  \PY{k}{type} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event}
+
+  \PY{c}{(*}\PY{c}{ Create a new event. }\PY{c}{*)}
+  \PY{k}{val} \PY{n}{new\PYZus{}event} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event}
+
+  \PY{c}{(*}\PY{c}{ Add a listener to an event which is called every time the event}
+\PY{c}{     is fired. Return an identifier for the listener. }\PY{c}{*)}
+  \PY{k}{val} \PY{n}{add\PYZus{}listener} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event} \PY{o}{\PYZhy{}\PYZgt{}} \PY{o}{(}\PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}\PY{o}{)} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{id}
+
+  \PY{c}{(*}\PY{c}{ Remove a listener from being called when an event is fired. Has no effect}
+\PY{c}{     if the listener is not waiting for the event. }\PY{c}{*)}
+  \PY{k}{val} \PY{n}{remove\PYZus{}listener} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{id} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}
+
+  \PY{c}{(*}\PY{c}{ Signal that an event has occurred.  The \PYZsq{}a value is passed to each}
+\PY{c}{     function waiting for the event. }\PY{c}{*)}
+  \PY{k}{val} \PY{n}{fire\PYZus{}event} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}
+\PY{k}{end}
+\end{Verbatim}
+
+Questions to consider:
+\begin{itemize}
+  \item Is the API well-documented?
+  \item Are the functions well-named?
+  \item Does the API provide all of the
+    necessary tools?
+    \ifsoln
+    \solution{} In general, I would
+    say yes, but it's offloads some 
+    management onto the client. Think
+    of what happened when we had to 
+    change all of the listeners for 
+    the \texttt{newswire} event, 
+    for example.
+    \fi
+
+
+  \item What, if anything, is missing?
+  \ifsoln
+  \solution{Some candidates:}
+  \begin{itemize}
+    \item One-shot listener function.
+    \item Get callbacks by id function.
+    \item Delete all callbacks / reset event
+    method. 
+    \item Fire multiple times function.
+  \end{itemize}
+  \fi
+\end{itemize}
+
+Is this module
+adequate for a full event system? 
+
+\section{Implementation Questions}
+
+Let's look in sequence at each of the
+portions of the implementation of the
+WEvent module and see they could be
+improved or how they are bad.
+
+\subsection{Event and waiter implementation}
+
+We defined the following type to represent
+events. What do you think of them?
+
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PY{k}{type} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{waiter} \PY{o}{=} \PY{o}{\PYZob{}}\PY{n}{id} \PY{o}{:} \PY{n}{id} \PY{o}{;} \PY{n}{action} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit}\PY{o}{\PYZcb{}}
+  \PY{k}{type} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event} \PY{o}{=} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{waiter} \PY{k+kt}{list} \PY{n}{ref} \PY{o}{;;}
+\end{Verbatim}
+
+What do you think of this implementation?
+Are there any problems with scalability
+here? Readability? Maintainability? 
+
+\ifsoln
+Some things to think about:
+\begin{itemize}
+  \item The system is set up around random
+  access. Many event systems require
+  registering lots of events, and graphics
+  systems also in general need to be
+  performant. What are the asymptotic times
+  for lookup and delete for callbacks? What
+  simple data structure could we use instead?
+  \item Why do we need a \texttt{ref}
+        event type? Why aren't waiters
+        exposed to the client? 
+\end{itemize}
+\fi
+
+\section{Fire event implementation}
+
+What do you think of this implementation
+of the fire_event function?
+
+\begin{Verbatim}[commandchars=\\\{\}]
+  \PY{k}{let} \PY{n}{fire\PYZus{}event} \PY{o}{(}\PY{n}{e} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{n}{event}\PY{o}{)} \PY{o}{(}\PY{n}{v} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a}\PY{o}{)} \PY{o}{:} \PY{k+kt}{unit} \PY{o}{=}
+    \PY{k}{let} \PY{n}{waiters} \PY{o}{=} \PY{o}{!}\PY{n}{e} \PY{k}{in}
+    \PY{k}{let} \PY{o}{\PYZus{}} \PY{o}{=} \PY{n+nn}{List}\PY{p}{.}\PY{n}{map} \PY{o}{(}\PY{k}{fun} \PY{n}{w} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n}{w}\PY{o}{.}\PY{n}{action} \PY{n}{v}\PY{o}{)}
+    \PY{n}{waiters} \PY{k}{in} \PY{n+nb+bp}{()}
+\end{Verbatim}
+
+\section{Error-Message Interpretation}
+(Thanks to Katherine Binney for this
+exercise).
+
+Many people in the lab yesterday started
+with following as their implementation
+of events. 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{newswire} \PY{o}{=} \PY{k}{fun} \PY{o}{\PYZus{}} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n+nn}{WEvent}\PY{p}{.}\PY{n}{new\PYZus{}event}\PY{o}{;}
+\end{Verbatim}
+but this resulted in the following error
+message later on: \\
+
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{fnn\PYZus{}listener} \PY{o}{=}
+    \PY{n+nn}{WEvent}\PY{p}{.}\PY{n}{add\PYZus{}listener} \PY{n}{newswire} \PY{n}{fakeNewsNetwork} \PY{o}{;;}
+\PY{n+nc}{Error}\PY{o}{:} \PY{n+nc}{This} \PY{n}{expression} \PY{n}{has} \PY{k}{type} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{unit} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{b} \PY{n+nn}{WEvent}\PY{p}{.}\PY{n}{event}                                               \PY{n}{but} \PY{n}{an} \PY{n}{expression} \PY{n}{was} \PY{n}{expected} \PY{k}{of} \PY{k}{type} \PY{k}{\PYZsq{}}\PY{n}{c} \PY{n+nn}{WEvent}\PY{p}{.}\PY{n}{event}
+\end{Verbatim}
+
+As practice for the midterm and the final
+project, what
+does this error mean? How do we debug it? 
+\\
+
+(Hint: I've said it a few times this
+semester.)
+
+\section{Type Annotation Quick Hits}
+
+There were a few interesting examples
+of ``delayed'' type inference this week.
+To see what I mean, let's do the following
+exercises (thanks to Katherine Binney,
+again):
+
+\begin{exercise} Write an OCaml expression
+for an empty string list.
+\ifsoln:
+Here's an empty list:
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{[]} \PY{o}{;;}
+\PY{k}{val} \PY{n}{x} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{k+kt}{list} \PY{o}{=} \PY{n+nb+bp}{[]}
+\end{Verbatim}
+But it's polymorphic! Remember,
+we can explicitly type it on 2 ways.
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{x} \PY{o}{:} \PY{k+kt}{string} \PY{k+kt}{list} \PY{o}{=} \PY{n+nb+bp}{[]} \PY{o}{;;}
+\PY{k}{val} \PY{n}{x} \PY{o}{:} \PY{k+kt}{string} \PY{k+kt}{list} \PY{o}{=} \PY{n+nb+bp}{[]}
+\end{Verbatim}
+or 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{[]} \PY{o}{;;}
+\PY{k}{val} \PY{n}{x} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{k+kt}{list} \PY{o}{=} \PY{n+nb+bp}{[]}
+\PY{o}{\PYZsh{}} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{hello}\PY{l+s+s2}{\PYZdq{}}\PY{o}{::}\PY{n}{x} \PY{o}{;;}
+\PY{o}{\PYZhy{}} \PY{o}{:} \PY{k+kt}{string} \PY{k+kt}{list} \PY{o}{=} \PY{o}{[}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{hello}\PY{l+s+s2}{\PYZdq{}}\PY{o}{]}
+\PY{o}{\PYZsh{}} \PY{n}{x} \PY{o}{;;}
+\PY{o}{\PYZhy{}} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{a} \PY{k+kt}{list} \PY{o}{=} \PY{n+nb+bp}{[]}
+\end{Verbatim}
+Wait, what?? Shouldn't this last \texttt{x}
+have type-checked as a string list? No! 
+The type of the value \texttt{x} hasn't 
+actually changed. How does this 
+compare to the way polymorphic events
+type-checked?
+\fi
+\end{exercise}
+
+\begin{exercise} Write a function
+\texttt{map_int} that maps over lists
+of integers. 
+\ifsoln
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{o}{\PYZsh{}} \PY{k}{let} \PY{n}{map\PYZus{}int} \PY{o}{(}\PY{n}{f} \PY{o}{:} \PY{k+kt}{int} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{b}\PY{o}{)} \PY{o}{(}\PY{n}{lst} \PY{o}{:} \PY{k+kt}{int} \PY{k+kt}{list}\PY{o}{)} \PY{o}{:} \PY{k}{\PYZsq{}}\PY{n}{b} \PY{k+kt}{list} \PY{o}{=} 
+  \PY{k}{let} \PY{k}{rec} \PY{n}{map\PYZsq{}} \PY{n}{lst} \PY{o}{=} 
+    \PY{k}{match} \PY{n}{lst} \PY{k}{with} 
+    \PY{o}{|} \PY{n+nb+bp}{[]} \PY{o}{\PYZhy{}\PYZgt{}} \PY{n+nb+bp}{[]}
+    \PY{o}{|} \PY{n}{h} \PY{o}{::} \PY{n}{t} \PY{o}{\PYZhy{}\PYZgt{}} \PY{o}{(}\PY{n}{f} \PY{n}{h}\PY{o}{)} \PY{o}{::} \PY{o}{(}\PY{n}{map\PYZsq{}} \PY{n}{t}\PY{o}{)} \PY{k}{in} 
+  \PY{n}{map\PYZsq{}} \PY{n}{lst}
+\PY{o}{;;}
+\PY{k}{val} \PY{n}{map\PYZus{}int} \PY{o}{:} \PY{o}{(}\PY{k+kt}{int} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{b}\PY{o}{)} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k+kt}{int} \PY{k+kt}{list} \PY{o}{\PYZhy{}\PYZgt{}} \PY{k}{\PYZsq{}}\PY{n}{b} \PY{k+kt}{list} \PY{o}{=} \PY{o}{\PYZlt{}}\PY{k}{fun}\PY{o}{\PYZgt{}}
+\end{Verbatim}
+\fi
+\end{exercise}
+
+\section{Understanding error messages (ie be the TF)}
+Note: Taken from (mostly private) piazza
+questions. We think giving you fish is ok,
+but we also want to teach you to fish.
+(Thanks to Katherine Binney, again.)
+
+\begin{exercise} What's the likely
+cause of this error message?
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{m1} \PY{o}{=} \PY{k}{new} \PY{n}{mass} \PY{l+m+mi}{0}\PY{o}{.} \PY{l+m+mi}{0}\PY{o}{.} \PY{o}{;;}
+\PY{k}{let} \PY{o}{\PYZus{}} \PY{o}{=} \PY{n}{m1}\PY{o}{\PYZsh{}}\PY{n}{move}  \PY{n}{m1}\PY{o}{;;}
+
+\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error: This expression has type float \PYZhy{}\PYZgt{} Masses.mass}
+\PY{l+s+s2}{       It has no method move}\PY{l+s+s2}{\PYZdq{}}
+\end{Verbatim}
+\end{exercise}
+
+\begin{exercise} This error message is
+a bit trickier. 
+\begin{Verbatim}[commandchars=\\\{\}]
+\PY{k}{let} \PY{n}{g} \PY{o}{=} \PY{k}{new} \PY{n}{point} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{o}{.}\PY{l+m+mi}{0} \PY{l+m+mi}{0}\PY{o}{.}\PY{l+m+mi}{0}\PY{o}{;;}
+\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Error: This expression has type float \PYZhy{}\PYZgt{} float \PYZhy{}\PYZgt{} point }
+\PY{l+s+s2}{but an expression was expected of type int.}\PY{l+s+s2}{\PYZdq{}}
+\end{Verbatim}
+\end{exercise}
+
+\section{Next Steps}
+
+Hopefully CS 51 has you excited about
+future courses in Computer Science. 
+
+Courses I recommend: 
+
+\begin{itemize}
+  \item CS 136
+  \item CS 121
+  \item CS 124
+  \item CS 61 
+  \item CS 134 
+  \item Stat 110
+  \item CS 187 (I hear the usual Prof. is
+  GREAT.)
+\end{itemize}
+
+I am happy to talk about them and others! 
+I also encourage you to be brave about
+200-level courses -- I wasn't particularly,
+and I missed out on some good stuff. 
+
+\end{document}  

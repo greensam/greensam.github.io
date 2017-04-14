@@ -1,0 +1,257 @@
+\documentclass[11pt]{amsart}
+\usepackage{graphicx}
+\usepackage{amssymb}
+\usepackage{minted}
+\input{../cs51-preamble}
+
+\title{Event Programming and Next Steps}
+\author{Sam Green}
+\date{\today}                                           % Activate to display a given date or no date
+
+\begin{document}
+\maketitle
+
+\section{API Design}
+
+Yesterday's lab focused on an implementation
+of the event system. To this point, we
+haven't talked much about what makes
+a useful API or a good interface. Let's 
+spend some time examining this interface.
+
+\begin{caml_listing}
+module type WEVENT =
+sig
+  (* The event listener identifier type. *)
+  type id
+
+  (* The event type. *)
+  type 'a event
+
+  (* Create a new event. *)
+  val new_event : unit -> 'a event
+
+  (* Add a listener to an event which is called every time the event
+     is fired. Return an identifier for the listener. *)
+  val add_listener : 'a event -> ('a -> unit) -> id
+
+  (* Remove a listener from being called when an event is fired. Has no effect
+     if the listener is not waiting for the event. *)
+  val remove_listener : 'a event -> id -> unit
+
+  (* Signal that an event has occurred.  The 'a value is passed to each
+     function waiting for the event. *)
+  val fire_event : 'a event -> 'a -> unit
+end
+\end{caml_listing}
+
+Questions to consider:
+\begin{itemize}
+  \item Is the API well-documented?
+  \item Are the functions well-named?
+  \item Does the API provide all of the
+    necessary tools?
+    \ifsoln
+    \solution{} In general, I would
+    say yes, but it's offloads some 
+    management onto the client. Think
+    of what happened when we had to 
+    change all of the listeners for 
+    the \texttt{newswire} event, 
+    for example.
+    \fi
+
+
+  \item What, if anything, is missing?
+  \ifsoln
+  \solution{Some candidates:}
+  \begin{itemize}
+    \item One-shot listener function.
+    \item Get callbacks by id function.
+    \item Delete all callbacks / reset event
+    method. 
+    \item Fire multiple times function.
+  \end{itemize}
+  \fi
+\end{itemize}
+
+Is this module
+adequate for a full event system? 
+
+\section{Implementation Questions}
+
+Let's look in sequence at each of the
+portions of the implementation of the
+WEvent module and see they could be
+improved or how they are bad.
+
+\subsection{Event and waiter implementation}
+
+We defined the following type to represent
+events. What do you think of them?
+
+\begin{caml_listing}
+  type 'a waiter = {id : id ; action : 'a -> unit}
+  type 'a event = 'a waiter list ref ;;
+\end{caml_listing}
+
+What do you think of this implementation?
+Are there any problems with scalability
+here? Readability? Maintainability? 
+
+\ifsoln
+Some things to think about:
+\begin{itemize}
+  \item The system is set up around random
+  access. Many event systems require
+  registering lots of events, and graphics
+  systems also in general need to be
+  performant. What are the asymptotic times
+  for lookup and delete for callbacks? What
+  simple data structure could we use instead?
+  \item Why do we need a \texttt{ref}
+        event type? Why aren't waiters
+        exposed to the client? 
+\end{itemize}
+\fi
+
+\section{Fire event implementation}
+
+What do you think of this implementation
+of the fire_event function?
+
+\begin{caml_listing}
+  let fire_event (e : 'a event) (v : 'a) : unit =
+    let waiters = !e in
+    let _ = List.map (fun w -> w.action v)
+    waiters in ()
+\end{caml_listing}
+
+\section{Error-Message Interpretation}
+(Thanks to Katherine Binney for this
+exercise).
+
+Many people in the lab yesterday started
+with following as their implementation
+of events. 
+\begin{caml_listing}
+let newswire = fun _ -> WEvent.new_event;
+\end{caml_listing} 
+but this resulted in the following error
+message later on: \\
+
+\begin{caml_listing}
+let fnn_listener =
+    WEvent.add_listener newswire fakeNewsNetwork ;;
+Error: This expression has type 'a -> unit -> 'b WEvent.event                                               but an expression was expected of type 'c WEvent.event
+\end{caml_listing}
+
+As practice for the midterm and the final
+project, what
+does this error mean? How do we debug it? 
+\\
+
+(Hint: I've said it a few times this
+semester.)
+
+\section{Type Annotation Quick Hits}
+
+There were a few interesting examples
+of ``delayed'' type inference this week.
+To see what I mean, let's do the following
+exercises (thanks to Katherine Binney,
+again):
+
+\begin{exercise} Write an OCaml expression
+for an empty string list.
+\ifsoln:
+Here's an empty list:
+\begin{caml_example}
+let x = [] ;;
+\end{caml_example}
+But it's polymorphic! Remember,
+we can explicitly type it on 2 ways.
+\begin{caml_example}
+let x : string list = [] ;;
+\end{caml_example}
+or 
+\begin{caml_example}
+let x = [] ;;
+"hello"::x ;;
+x ;;
+\end{caml_example}
+Wait, what?? Shouldn't this last \texttt{x}
+have type-checked as a string list? No! 
+The type of the value \texttt{x} hasn't 
+actually changed. How does this 
+compare to the way polymorphic events
+type-checked?
+\fi
+\end{exercise}
+
+\begin{exercise} Write a function
+\texttt{map_int} that maps over lists
+of integers. 
+\ifsoln
+\begin{caml_example}
+let map_int (f : int -> 'b) (lst : int list) : 'b list = 
+  let rec map' lst = 
+    match lst with 
+    | [] -> []
+    | h :: t -> (f h) :: (map' t) in 
+  map' lst
+;;
+\end{caml_example}
+\fi
+\end{exercise}
+
+\section{Understanding error messages (ie be the TF)}
+Note: Taken from (mostly private) piazza
+questions. We think giving you fish is ok,
+but we also want to teach you to fish.
+(Thanks to Katherine Binney, again.)
+
+\begin{exercise} What's the likely
+cause of this error message?
+\begin{caml_listing}
+let m1 = new mass 0. 0. ;;
+let _ = m1#move  m1;;
+
+"Error: This expression has type float -> Masses.mass
+       It has no method move"
+\end{caml_listing}
+\end{exercise}
+
+\begin{exercise} This error message is
+a bit trickier. 
+\begin{caml_listing}
+let g = new point -1.0 0.0;;
+"Error: This expression has type float -> float -> point 
+but an expression was expected of type int."
+\end{caml_listing}
+\end{exercise}
+
+\section{Next Steps}
+
+Hopefully CS 51 has you excited about
+future courses in Computer Science. 
+
+Courses I recommend: 
+
+\begin{itemize}
+  \item CS 136
+  \item CS 121
+  \item CS 124
+  \item CS 61 
+  \item CS 134 
+  \item Stat 110
+  \item CS 187 (I hear the usual Prof. is
+  GREAT.)
+\end{itemize}
+
+I am happy to talk about them and others! 
+I also encourage you to be brave about
+200-level courses -- I wasn't particularly,
+and I missed out on some good stuff. 
+
+\end{document}  

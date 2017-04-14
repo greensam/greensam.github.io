@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{module} \PYG{k}{type} \PYG{n+nc}{WEVENT} \PYG{o}{=}
+\PYG{k}{sig}
+  \PYG{c}{(* The event listener identifier type. *)}
+  \PYG{k}{type} \PYG{n}{id}
+
+  \PYG{c}{(* The event type. *)}
+  \PYG{k}{type} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{n}{event}
+
+  \PYG{c}{(* Create a new event. *)}
+  \PYG{k}{val} \PYG{n}{new\PYGZus{}event} \PYG{o}{:} \PYG{k+kt}{unit} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{n}{event}
+
+  \PYG{c}{(* Add a listener to an event which is called every time the event}
+\PYG{c}{     is fired. Return an identifier for the listener. *)}
+  \PYG{k}{val} \PYG{n}{add\PYGZus{}listener} \PYG{o}{:} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{n}{event} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{o}{(}\PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kt}{unit}\PYG{o}{)} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{id}
+
+  \PYG{c}{(* Remove a listener from being called when an event is fired. Has no effect}
+\PYG{c}{     if the listener is not waiting for the event. *)}
+  \PYG{k}{val} \PYG{n}{remove\PYGZus{}listener} \PYG{o}{:} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{n}{event} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{n}{id} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kt}{unit}
+
+  \PYG{c}{(* Signal that an event has occurred.  The \PYGZsq{}a value is passed to each}
+\PYG{c}{     function waiting for the event. *)}
+  \PYG{k}{val} \PYG{n}{fire\PYGZus{}event} \PYG{o}{:} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{n}{event} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k}{\PYGZsq{}}\PYG{n}{a} \PYG{o}{\PYGZhy{}\PYGZgt{}} \PYG{k+kt}{unit}
+\PYG{k}{end}
+\end{Verbatim}
