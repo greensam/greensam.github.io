@@ -1,0 +1,13 @@
+ps3.ml
+*.aux
+*.log
+*.mlt
+*.nav
+*.out
+*.snm
+*.toc
+*.vrb
+*.tex
+
+lab4_part5_soln.ml
+template.*
