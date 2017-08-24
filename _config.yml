@@ -1,6 +1,7 @@
 title: "Samuel Green"
 url: "https://greensam.github.io"
 baseurl: ""
+favicon: favicon.ico
 
 markdown: kramdown
 
