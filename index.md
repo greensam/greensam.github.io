@@ -3,7 +3,7 @@ layout: default
 title: Home | Samuel Green
 ---
 
-## About
+<br>
 
 <img class="profile-picture" src="headshot_new.jpg">
 
@@ -16,6 +16,8 @@ on [multi-agent markets](https://en.wikipedia.org/wiki/Two-sided_market) for ind
 I helped
 [Prof. Stuart Shieber](http://eecs.harvard.edu/shieber/) lead [Computer Science 51: Abstraction and 
 Design in Computation](http://cs51.io) along with [Gabbi Merz](http://gcmerz.github.io). 
+
+#### [What I've Been Reading](/books)
 
 #### Projects
 <ul>
