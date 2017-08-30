@@ -10,9 +10,14 @@ title: Book List | Samuel Green
 <ul>
     {% for book in site.data.books %}
     <li>
-    <a class='inline' href="{{ book.amazon }}">{{ book.title }}
-    </a>
-    {% if book.subtitle %}: {{book.subtitle}}.{% else %}.{%endif%}
-        {{book.author}}</li>
+    {% if book.subtitle %}
+    <a class='inline' href="{{ book.amazon }}">
+    {{ book.title }}</a>: {{book.subtitle}}.
+    {% else %}
+    <a class='inline' href="{{ book.amazon }}">
+    {{ book.title }}</a>.
+    {% endif %}
+    <br>– {{book.author}}
+    </li>
     {% endfor %}
 </ul>
