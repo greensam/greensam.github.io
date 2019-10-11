@@ -12,6 +12,7 @@ title: Contact | Samuel Green
 
 ## Social
 
-1. [GitHub](http://github.com/greensam)
-2. [Twitter](http://twitter.com/s_m__lgr__n)
-3. [LinkedIn](https://www.linkedin.com/in/sa-muel-green)
+1. [GitHub](https://github.com/greensam)
+2. [LinkedIn](https://www.linkedin.com/in/sa-muel-green)
+3. [Twitter](https://twitter.com/s_m__lgr__n)
+4. [Instagram](https://instagram.com/s_m__lgr__n)
