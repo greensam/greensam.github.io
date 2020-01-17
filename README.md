@@ -1,6 +1,6 @@
-# Researcher
+# SLG Researcher Fork
 
-### [Demo Website](https://ankitsultana.me/researcher)
+### [Sam Green Personal Page](https://sa.muel.green/)
 
 A clean, single column, monospace resume template built for jekyll
 
@@ -30,6 +30,14 @@ Simply fork the repository and edit away.
 
 **Note:** Customizing the accent color might cause merge conflicts if you later try to merge from `bk2dcradle/researcher` to fetch updates/patches etc. (applicable only if you have forked).
 
-### License
+### Generation
+
+To deploy the site, push to a properly configured github pages repository.
+
+To develop locally, run `bundle exec jekyll serve` and navigate to `localhost:4000`
+
+### Based On:
+
+[https://github.com/bk2dcradle/researcher](https://github.com/ankitsultana/researcher)
 
 [GNU GPL v3](https://github.com/bk2dcradle/researcher/blob/gh-pages/LICENSE)
