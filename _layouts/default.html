@@ -56,7 +56,13 @@
 <body>
     <div class="wrapper">
         <div class="navbar container">
+            {% if site.data.nav %}
             <a id="author-name" class="alignable" href="{{ site.url }}{{ site.baseurl }}">{{ site.title }}</a>
+            {% else %}
+            <p id="author-name" class="alignable" href="{{ site.url }}{{ site.baseurl }}">{{ site.title }}</p>
+            {% endif %}
+
+            
             {% if site.data.nav %}
             <ul class="alignable pull-right navbar-ul">
                 {% for x in site.data.nav %}
